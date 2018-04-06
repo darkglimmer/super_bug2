@@ -121,7 +121,7 @@ function playball(game){
         } 
         function ballHitBrick(_ball,_brick){
             _brick.kill();
-            if (bricks.countLiving() == 1)
+            if (bricks.countLiving() == -1)
             {
                 ball.body.velocity.y = 300;
                 ball.body.velocity.x = 75;
