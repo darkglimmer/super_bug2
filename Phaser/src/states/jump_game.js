@@ -215,13 +215,16 @@ MyGame.prototype = {
 			
 			if (lives === 0)
 			{
-				gameOver();//图
+				gameOver();
 			}
 			else
 			{
 				game.state.start("jump_game");
 			}
 		}
+	},
+	gameOver:function(){
+		this.isRun = false;
 	},
 	update: function() {
 		if(this.isRun){
