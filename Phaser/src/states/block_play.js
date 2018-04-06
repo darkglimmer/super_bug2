@@ -1,13 +1,16 @@
 var width,height;
 function playState(game){
     var layer;
-    var player;
+    var curbox;
     var iBox,lBox,oBox,tBox,xBox;
     var overGroup,gameOver=false;
     // var point,playerPoint=0;
     var gameOverText;
     var keys;
     var xNumber,yNumber;
+
+    var player;
+
     // var width = game.width,height = game.height;
     // var btnSound,groundSound,scoreSound;
     var groundSound;
@@ -26,6 +29,7 @@ function playState(game){
     this.create = function () {
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.physics.p2.gravity.y=150;
+        game.physics.p2.setBounds(100,50,320,640,)
         // 添加瓦片地图
         // if(isPc){
             var map = game.add.tilemap('map_1');
@@ -45,9 +49,20 @@ function playState(game){
         //     map.setCollision(40);
         // }
         
-        // game.add.image(0,0,'background');
+        var background = game.add.image(-45,100,'background');
+        background.scale.set(1.12);
 
         game.physics.p2.convertTilemap(map, layer);
+        
+
+        // game.input.mouse.capture = true;
+        // var play = game.add.sprite(100,100,'IBOX');
+        // game.physics.arcade.enable(play, Phaser.Physics.ARCADE)
+        // play.isRun = true;
+        // if(play.isRun){
+        //     this.physics.arcade.moveToPointer(this.mouseSprite, 60, this.input.activePointer, 200);
+        //     this.play.x = this.mouseSprite.x;
+        // };//以给定的速度将给定的显示对象移向指定位置。
 
         // //鸟
         // bird = game.add.sprite(20,200,'bird');
@@ -58,57 +73,54 @@ function playState(game){
         // bird.animations.play('fly',12,true);
         // bird.body.angle = 10;
         // game.add.tween(bird.body).to({y:180,angle:-10},450,null,true,0,Number.MAX_VALUE,true);
+
+        player = game.add.sprite(100,300,'bird');
+        game.physics.p2.enable(player,false);
         //随机产生box
         // function createBox(){
-        //     var random = Math.floor(Math.random()*7);
+        //     var random = Math.floor(Math.random()*5);
             
         //     switch (random){
         //         case 0:
-        //             player = game.add.sprite(width/2,50,'iBox');
-        //             game.physics.p2.enable(player,false);
+        //             curbox = game.add.sprite(width/2,200,'iBox');
+        //             curbox.scale.set(0.4);
+        //             game.physics.p2.enable(curbox,false);
         //             // player.body.clearShapes();
         //             // player.body.loadPolygon('physicsData','iBox');
         //         break;
         //         case 1:
-        //             player = game.add.sprite(width/2,50,'lBox');
-        //             game.physics.p2.enable(player,false);
-        //             player.body.clearShapes();
-        //             player.body.loadPolygon('physicsData','LBox');
+        //             curbox = game.add.sprite(width/2,200,'lBox');
+        //             game.physics.p2.enable(curbox,false);
+        //             curbox.scale.set(0.4);
+        //             // curbox.body.clearShapes();
+        //             // curbox.body.loadPolygon('physicsData','LBox');
         //         break;
         //         case 2:
-        //             player = game.add.sprite(width/2+100,50,'oBox');
-        //             game.physics.p2.enable(player,false);
+        //             curbox = game.add.sprite(width/2,200,'oBox');
+        //             game.physics.p2.enable(curbox,false);
+        //             curbox.scale.set(0.4);
         //         break;
         //         case 3:
-        //             player = game.add.sprite(width/2,50,'tBox');
-        //             game.physics.p2.enable(player,false);
-        //             player.body.clearShapes();
-        //             player.body.loadPolygon('physicsData','TBox');
+        //             curbox = game.add.sprite(width/2,200,'tBox');
+        //             game.physics.p2.enable(curbox,false);
+        //             curbox.scale.set(0.4);
+        //             // player.body.clearShapes();
+        //             // player.body.loadPolygon('physicsData','TBox');
         //         break;
         //         case 4:
-        //             player = game.add.sprite(width/2,50,'xBox');
-        //             game.physics.p2.enable(player,false);
-        //             player.body.clearShapes();
-        //             player.body.loadPolygon('physicsData','XBox');
+        //             curbox = game.add.sprite(width/2,200,'xBox');
+        //             game.physics.p2.enable(curbox,false);
+        //             curbox.scale.set(0.4);
+        //             // player.body.clearShapes();
+        //             // player.body.loadPolygon('physicsData','XBox');
         //         break;
-        //         case 5:
-        //             player = game.add.sprite(width/2,50,'xBox_');
-        //             game.physics.p2.enable(player,false);
-        //             player.body.clearShapes();
-        //             player.body.loadPolygon('physicsData','XBox_');
-        //         break;
-        //         case 6:
-        //             player = game.add.sprite(width/2,50,'lBox_');
-        //             game.physics.p2.enable(player,false);
-        //             player.body.clearShapes();
-        //             player.body.loadPolygon('physicsData','LBox_');
-        //         break;
+
         //     }
-        //     player.body.damping=0.6;
-        //     player.body.onBeginContact.addOnce(blockHit, this);
+        //     curbox.body.damping=0.1;
+        //     curbox.body.onBeginContact.addOnce(blockHit, this);
         // }
 
-        var boxarray = [[0,200],[1,300]];
+        var boxarray = [[0,65],[1,125],[0,325],[2,200],[1,125]];
         function createBox(){
             var box = boxarray.shift();
             if(!box){
@@ -116,48 +128,42 @@ function playState(game){
             }
             switch (box[0]){
                 case 0:
-                    player = game.add.sprite(box[1],50,'iBox');
-                    game.physics.p2.enable(player,false);
+                    curbox = game.add.sprite(box[1],100,'iBox');
+                    curbox.scale.set(0.4);
+                    game.physics.p2.enable(curbox,false);
                     // player.body.clearShapes();
                     // player.body.loadPolygon('physicsData','iBox');
                 break;
                 case 1:
-                    player = game.add.sprite(box[1],50,'lBox');
-                    game.physics.p2.enable(player,false);
-                    player.body.clearShapes();
-                    player.body.loadPolygon('physicsData','LBox');
+                    curbox = game.add.sprite(box[1],100,'lBox');
+                    curbox.scale.set(0.4);
+                    game.physics.p2.enable(curbox,false);
+                    // curbox.body.clearShapes();
+                    // curbox.body.loadPolygon('physicsData','LBox');
                 break;
                 case 2:
-                    player = game.add.sprite(box[1]+100,50,'oBox');
-                    game.physics.p2.enable(player,false);
+                    curbox = game.add.sprite(box[1],100,'oBox');
+                    curbox.scale.set(0.4);
+                    game.physics.p2.enable(curbox,false);
                 break;
                 case 3:
-                    player = game.add.sprite(box[1],50,'tBox');
-                    game.physics.p2.enable(player,false);
-                    player.body.clearShapes();
-                    player.body.loadPolygon('physicsData','TBox');
+                    curbox = game.add.sprite(box[1],100,'tBox');
+                    curbox.scale.set(0.4);
+                    game.physics.p2.enable(curbox,false);
+                    // curbox.body.clearShapes();
+                    // curbox.body.loadPolygon('physicsData','TBox');
                 break;
                 case 4:
-                    player = game.add.sprite(box[1],50,'xBox');
-                    game.physics.p2.enable(player,false);
-                    player.body.clearShapes();
-                    player.body.loadPolygon('physicsData','XBox');
+                    curbox = game.add.sprite(box[1],100,'xBox');
+                    curbox.scale.set(0.4);
+                    game.physics.p2.enable(curbox,false);
+                    // curbox.body.clearShapes();
+                    // curbox.body.loadPolygon('physicsData','XBox');
                 break;
-                case 5:
-                    player = game.add.sprite(box[1],50,'xBox_');
-                    game.physics.p2.enable(player,false);
-                    player.body.clearShapes();
-                    player.body.loadPolygon('physicsData','XBox_');
-                break;
-                case 6:
-                    player = game.add.sprite(box[1],50,'lBox_');
-                    game.physics.p2.enable(player,false);
-                    player.body.clearShapes();
-                    player.body.loadPolygon('physicsData','LBox_');
-                break;
+
             }
-            player.body.damping=0.6;
-            player.body.onBeginContact.addOnce(blockHit, this);
+            curbox.body.damping=0.1;
+            curbox.body.onBeginContact.addOnce(blockHit, this);
         }
         createBox();
         //碰撞檢測
@@ -169,8 +175,8 @@ function playState(game){
                         // getPoint();
                         createBox();
                     }else{
-                        player.body.onBeginContact.removeAll();
-                        player.body.onBeginContact.addOnce(blockHit, this);
+                        curbox.body.onBeginContact.removeAll();
+                        curbox.body.onBeginContact.addOnce(blockHit, this);
                     }
                 }
             }
@@ -209,79 +215,79 @@ function playState(game){
         //     point.text=playerPoint;
         // }
 
-        // //添加触屏按钮
-        // if(!isPc){
-        //     var btn_change = game.add.button(width-150,height/3*2,'change',actionOnClick,this);
-        //     btn_change.scale.setTo(1.2);
-        //     btn_change.alpha=0.3;
-        //     var btn_left = game.add.button(0,height/3*2,'fxj',left_go,this);
-        //     var btn_right = game.add.button(200,height/3*2,'fxj',right_go,this);
-        //     var btn_up = game.add.button(100,height/3*2-100,'fxj',up_go,this);
-        //     var btn_down = game.add.button(100,height/3*2+100,'fxj',down_go,this);
-        //     btn_left.alpha = 0.3;
-        //     btn_left.scale.setTo(1.2);
-        //     btn_right.alpha = 0.3;
-        //     btn_right.scale.setTo(1.2);
-        //     btn_up.alpha = 0.3;
-        //     btn_up.scale.setTo(1.2);
-        //     btn_down.alpha = 0.3;
-        //     btn_down.scale.setTo(1.2);
-        //     function actionOnClick(){
-        //         // btnSound.play();
-        //         player.body.angle = player.body.angle + 90;
-        //     }
-        //     function left_go(key){
-        //         // btnSound.play();
-        //         player.body.velocity.x = -120;
-        //     }
-        //     function right_go(key){
-        //         // btnSound.play();
-        //         player.body.velocity.x = 120;
-        //     }
-        //     function up_go(key){
-        //         // btnSound.play();
-        //         player.body.velocity.y = 0;
-        //     }
-        //     function down_go(key){
-        //         // btnSound.play();
-        //         player.body.velocity.y += 100;
-        //     }
-        // }else{
-        //     //按键
-        //     keys = game.input.keyboard.addKeys({ left: Phaser.Keyboard.LEFT, right: Phaser.Keyboard.RIGHT, up: Phaser.Keyboard.UP,down:Phaser.Keyboard.DOWN,spin: Phaser.Keyboard.SPACEBAR });
-        //     keys.left.onDown.add(keyDown,this);
-        //     keys.right.onDown.add(keyDown,this);
-        //     keys.up.onDown.add(keyDown,this);
-        //     keys.spin.onDown.add(keyDown,this);
-        //     keys.down.onDown.add(keyDown,this);
-        //     function keyDown(key){
-        //         if(!gameOver){
-        //             switch (key.keyCode){
-        //                 case Phaser.Keyboard.LEFT:
-        //                     // btnSound.play();
-        //                     player.body.velocity.x = -80;
-        //                     break;
-        //                 case Phaser.Keyboard.RIGHT:
-        //                     // btnSound.play();
-        //                     player.body.velocity.x = 80;
-        //                     break;
-        //                 case Phaser.Keyboard.UP:
-        //                     // btnSound.play();
-        //                     player.body.velocity.y = 0;
-        //                     break;
-        //                 case Phaser.Keyboard.DOWN:
-        //                     // btnSound.play();
-        //                     player.body.velocity.y +=100;
-        //                     break;
-        //                 case Phaser.Keyboard.SPACEBAR:
-        //                     // btnSound.play();
-        //                     player.body.angle = player.body.angle + 90;
-        //                     break;
-        //             }
-        //         }
-        //     }
+        //添加触屏按钮
+        if(!isPc){
+            var btn_change = game.add.button(width-150,height/3*2,'change',actionOnClick,this);
+            btn_change.scale.setTo(1.2);
+            btn_change.alpha=0.3;
+            var btn_left = game.add.button(0,height/3*2,'fxj',left_go,this);
+            var btn_right = game.add.button(200,height/3*2,'fxj',right_go,this);
+            var btn_up = game.add.button(100,height/3*2-100,'fxj',up_go,this);
+            var btn_down = game.add.button(100,height/3*2+100,'fxj',down_go,this);
+            btn_left.alpha = 0.3;
+            btn_left.scale.setTo(1.2);
+            btn_right.alpha = 0.3;
+            btn_right.scale.setTo(1.2);
+            btn_up.alpha = 0.3;
+            btn_up.scale.setTo(1.2);
+            btn_down.alpha = 0.3;
+            btn_down.scale.setTo(1.2);
+            function actionOnClick(){
+                // btnSound.play();
+                player.body.angle = player.body.angle + 90;
+            }
+            function left_go(key){
+                // btnSound.play();
+                player.body.velocity.x = -120;
+            }
+            function right_go(key){
+                // btnSound.play();
+                player.body.velocity.x = 120;
+            }
+            function up_go(key){
+                // btnSound.play();
+                player.body.velocity.y = 0;
+            }
+            function down_go(key){
+                // btnSound.play();
+                player.body.velocity.y += 100;
+            }
+        }else{
+            //按键
+            keys = game.input.keyboard.addKeys({ left: Phaser.Keyboard.LEFT, right: Phaser.Keyboard.RIGHT, up: Phaser.Keyboard.UP,down:Phaser.Keyboard.DOWN,spin: Phaser.Keyboard.SPACEBAR });
+            keys.left.onDown.add(keyDown,this);
+            keys.right.onDown.add(keyDown,this);
+            keys.up.onDown.add(keyDown,this);
+            keys.spin.onDown.add(keyDown,this);
+            keys.down.onDown.add(keyDown,this);
+            function keyDown(key){
+                if(!gameOver){
+                    switch (key.keyCode){
+                        case Phaser.Keyboard.LEFT:
+                            // btnSound.play();
+                            player.body.velocity.x = -80;
+                            break;
+                        case Phaser.Keyboard.RIGHT:
+                            // btnSound.play();
+                            player.body.velocity.x = 80;
+                            break;
+                        case Phaser.Keyboard.UP:
+                            // btnSound.play();
+                            player.body.velocity.y = -200;
+                            break;
+                        case Phaser.Keyboard.DOWN:
+                            // btnSound.play();
+                            player.body.velocity.y += 0;
+                            break;
+                        case Phaser.Keyboard.SPACEBAR:
+                            // btnSound.play();
+                            player.body.angle = player.body.angle + 90;
+                            break;
+                    }
+                }
+            }
 
-        // }
+        }
 
     }
     this.update = function () {

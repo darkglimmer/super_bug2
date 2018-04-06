@@ -48,9 +48,9 @@ function loadState(game){
             game.load.image('oBox','assets/img/pc/OBox.png');
             game.load.image('tBox','assets/img/pc/TBox.png');
             game.load.image('xBox','assets/img/pc/XBox.png');
-            game.load.image('xBox_','assets/img/pc/XBox_.png');
-            game.load.image('lBox_','assets/img/pc/LBox_.png');
-            game.load.physics('physicsData',null,pcBox);
+            // game.load.image('xBox_','assets/img/pc/XBox_.png');
+            // game.load.image('lBox_','assets/img/pc/LBox_.png');
+            // game.load.physics('physicsData',null,pcBox);
             // game.load.tilemap('map_2',null,mapTwoJson,Phaser.Tilemap.EAST);
             game.load.tilemap('map_1',null,mapJson,Phaser.Tilemap.EAST);
             game.load.image('background','assets/img/map.png');
@@ -63,7 +63,7 @@ function loadState(game){
         // game.load.audio('btn_sound','assets/music/flap.wav');
         game.load.audio('ground_sound','assets/music/ground-hit.wav');
         // game.load.audio('score_sound','assets/music/score.wav');
-        // game.load.spritesheet('bird','assets/img/bird.png',34,24,3);
+        game.load.spritesheet('bird','assets/img/bird.png',34,24,3);
     }
     this.create = function(){
         game.state.start('play');
