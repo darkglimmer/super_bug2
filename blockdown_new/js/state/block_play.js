@@ -301,7 +301,7 @@ function playState(game){
                             break;
                         case Phaser.Keyboard.UP:
                             // btnSound.play();
-                            player.body.velocity.y = -30;
+                            player.body.velocity.y = -100;
                             break;
                         case Phaser.Keyboard.DOWN:
                             // btnSound.play();
@@ -327,11 +327,15 @@ function playState(game){
         // if(bird.body.x > width+20){
         //     bird.body.x = 0;
         // }
-        if(player.body.y < 100){
+        console.log(player.body.y);
+        if(player.body.y < 300){
             gameOver = true;
+            
         }
         if(gameOver){
+            game.state.start('loadball')
             createGameOverText();
+            
         }
     }
     function createGameOverText(){

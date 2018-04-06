@@ -14,6 +14,10 @@
   <script src="js/state/block_gameover.js"></script>
   <script src="js/state/mario_image.js"></script>
   <script src="js/state/mario_play.js"></script>
+  <script src="js/state/ball_load.js"></script>
+  <script src="js/state/ball_play.js"></script>
+
+
 
 
 
@@ -45,10 +49,14 @@
     game.state.add('gameover',overState);
     game.state.add('mario',loadMario);
     game.state.add('playmario',playMario);
+    game.state.add('loadball',loadball);
+    game.state.add('playball',playball);
+
+
 
     // game.state.add('menu',menuState);
     // game.state.add('playTwo',play_2State);
-    game.state.start('mario');
+    game.state.start('loadball');
   </script>
 </head>
 <body>
