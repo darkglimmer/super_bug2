@@ -29,13 +29,13 @@ ball.prototype = {
         var brick;
 
         for (var y = 0; y < 4; y++){
-            for (var x = 0; x < 15; x++){
-                brick = bricks.create(120 + (x * 36), 100 + (y * 52), 'brick_' + (y+1));
+            for (var x = 0; x < 9; x++){
+                brick = bricks.create(64 + (x * 57), 170 + (y * 165), 'brick_' + (y+1));
                 brick.body.bounce.set(1);//反弹
                 brick.body.immovable = true;//砖块不能动
             }
         }
-        paddle = game.add.sprite(game.world.centerX, 1200,'go');
+        paddle = game.add.sprite(game.world.centerX, 812,'go');
         paddle.anchor.setTo(0.5, 0.5);//设置木板的中心点
 
         game.physics.enable(paddle, Phaser.Physics.ARCADE);
@@ -44,7 +44,7 @@ ball.prototype = {
         paddle.body.bounce.set(1);
         paddle.body.immovable = true;
 
-        ball = game.add.sprite(game.world.centerX, paddle.y - 16, 'ball');
+        ball = game.add.sprite(game.world.centerX, paddle.y - 30, 'ball');
         ball.anchor.set(0.5);//指定坐标，居中.
         ball.checkWorldBounds = true;//on the Sprite to true
 
@@ -64,13 +64,13 @@ ball.prototype = {
 
         paddle.x = game.input.x;
     
-        if (paddle.x < 24)
+        if (paddle.x < 90)
         {
-            paddle.x = 24;
+            paddle.x = 90;
         }
-        else if (paddle.x > game.width - 24)
+        else if (paddle.x > game.width - 90)
         {
-            paddle.x = game.width - 24;
+            paddle.x = game.width - 90;
         }
     
         if (ballOnPaddle)
@@ -101,7 +101,7 @@ ball.prototype = {
         else{
             ballOnPaddle = true;
     
-            ball.reset(paddle.body.x + 16, paddle.y - 16);
+            ball.reset(paddle.body.x + 30, paddle.y - 30);
             
             ball.animations.stop();
         }
