@@ -1,3 +1,4 @@
+import lives from 'block_play.js'
 var ball = function(){
     var ball;
     var paddle;//木板
@@ -8,7 +9,13 @@ var ball = function(){
 };
 ball.prototype = {
     preload:function(){
-        game.load.atlas('breakout', './images/breakout.png', './images/breakout.json');
+        game.load.image('ball', './images/ball.png');
+        game.load.image('brick_1', './images/tanqiu1.png');
+        game.load.image('brick_2', './images/tanqiu2.png');
+        game.load.image('brick_3', './images/tanqiu3.png');
+        game.load.image('brick_4', './images/tanqiu4.png');
+        game.load.image('goleft', './images/左行0.png');
+        game.load.image('goright', './images/右行0.png');
         game.load.image('starfield', './images/starfield.jpg');
     },
     create:function(){
@@ -24,12 +31,12 @@ ball.prototype = {
 
         for (var y = 0; y < 4; y++){
             for (var x = 0; x < 15; x++){
-                brick = bricks.create(120 + (x * 36), 100 + (y * 52), 'breakout', 'brick_' + (y+1) + '_1.png');
+                brick = bricks.create(120 + (x * 36), 100 + (y * 52), 'brick_' + (y+1));
                 brick.body.bounce.set(1);//反弹
                 brick.body.immovable = true;//砖块不能动
             }
         }
-        paddle = game.add.sprite(game.world.centerX, 1200, 'breakout', 'paddle_big.png');
+        paddle = game.add.sprite(game.world.centerX, 1200,'.png');
         paddle.anchor.setTo(0.5, 0.5);//设置木板的中心点
 
         game.physics.enable(paddle, Phaser.Physics.ARCADE);
@@ -89,19 +96,11 @@ ball.prototype = {
     ballLost:function(){
         lives--;
         livesText.text = 'lives: ' + lives;
+        ballOnPaddle = true;
     
-        if (lives === 0)
-        {
-            gameOver();//图
-        }
-        else
-        {
-            ballOnPaddle = true;
-    
-            ball.reset(paddle.body.x + 16, paddle.y - 16);
+        ball.reset(paddle.body.x + 16, paddle.y - 16);
             
-            ball.animations.stop();
-        }
+        ball.animations.stop();
     },
     gameOver:function(){
         ball.body.velocity.setTo(0, 0);
@@ -118,8 +117,7 @@ ball.prototype = {
     },
     ballHitPaddle:function(){
         if(bricks.countLiving() == 1){
-            //floor.Animation
-            //黑屏
+            game.state.start("jump_load");
         }
         else{
             var diff = 0;
@@ -144,9 +142,9 @@ ball.prototype = {
         }
     },
     ballHitfloor:function(){
-    //floor.Animation
-    //黑屏
+        game.state.start("jump_load");
     }
 };
 
 export default ball;
+export default lives;
