@@ -1,4 +1,5 @@
 var width,height;
+import 
 function playState(game){
     var layer;
     var player;

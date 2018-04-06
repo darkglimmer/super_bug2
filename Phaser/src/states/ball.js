@@ -1,3 +1,4 @@
+import lives from 'block_play.js'
 var ball = function(){
     var ball;
     var paddle;//木板
@@ -118,8 +119,7 @@ ball.prototype = {
     },
     ballHitPaddle:function(){
         if(bricks.countLiving() == 1){
-            //floor.Animation
-            //黑屏
+            game.state.start("jump_load");
         }
         else{
             var diff = 0;
@@ -144,9 +144,9 @@ ball.prototype = {
         }
     },
     ballHitfloor:function(){
-    //floor.Animation
-    //黑屏
+        game.state.start("jump_load");
     }
 };
 
 export default ball;
+export default lives;

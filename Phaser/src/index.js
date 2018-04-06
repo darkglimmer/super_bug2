@@ -7,12 +7,15 @@ import Load from './states/jump_load'
 import MyGame from './states/jump_game'
 import ball from './states/ball'
 import Menu from './states/menu'
+import playState from './states/block_play'
+import loadState from './states/block_load'
+import Gameover from './states/Gameover'
 
 var isStart = false,
-	music = [],
-	initScreen=function(callback){//初始化html  font-size
-    	document.getElementById("html").style.setProperty("font-size",gameWidth/375*312.5+"%");
-    };
+music = [],
+initScreen=function(callback){//初始化html  font-size
+	document.getElementById("html").style.setProperty("font-size",gameWidth/375*312.5+"%");
+};
 function setSize(){
 	gameWidth = window.innerWidth > 640 ? 640 : window.innerWidth;
 	gameHeight = window.innerHeight;
@@ -34,6 +37,9 @@ function winOrientation(){
 			game.state.add('jump_game', Mygame, false)
 			game.state.add('ball', ball, false)
 			game.state.add('menu', Menu,false)
+			game.state.add('block_load',loadState,false)
+			game.state.add('block_play',playState,false)
+			game.state.add('Gameover',Gameover,false)
 			game.state.start('menu');	
 			document.getElementById("forhorview").style.setProperty("display", "none");
 			isStart = true;
@@ -43,4 +49,6 @@ function winOrientation(){
 		};
 	};
 };
+
+export default lives;
 

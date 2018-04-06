@@ -1,4 +1,5 @@
 //game.js
+import lives from 'ball'
 function l(a, b) {
     a = Math.round(a);
     b = Math.round(b);
@@ -50,6 +51,7 @@ MyGame.prototype = {
 		return val;
 	},//缩放(适配)
 	create: function() {
+		//livesText = game.add.text(680, 550, 'lives:'+ lives, { font: "20px Arial", fill: "#ffffff", align: "left" });
 		this.atlasIndex = 0;
 		this.atlasMap = this.atlasMap.sort(ranArr);//排序
 		//this.stage.backgroundColor = '#edffd9';
@@ -110,8 +112,6 @@ MyGame.prototype = {
 		this.play.outOfCameraBoundsKill = true;
 		this.play.autoCull = true; 
 		this.play.events.onKilled.add(function(sprite){
-			console.log('死了')//死了的其他链接图
-			//music[4].play();//背景音乐
 			this.gameEnd(false);
 		},this);
 		this.physics.arcade.enable(this.play);
@@ -208,7 +208,8 @@ MyGame.prototype = {
 	},
 	gameEnd: function(type){
 		if(type){
-			var oTitle = '恭喜达到最高点，本次得分';//改为场景切换
+			//gif
+			game.state.start("Gameover");
 		}else{
 			lives--;
 			livesText.text = 'lives: ' + lives;
@@ -219,12 +220,13 @@ MyGame.prototype = {
 			}
 			else
 			{
-				game.state.start("jump_game");
+				game.state.start("jump_load");
 			}
 		}
 	},
 	gameOver:function(){
 		this.isRun = false;
+		//跳出，放gif
 	},
 	update: function() {
 		if(this.isRun){
