@@ -29,7 +29,7 @@ function playState(game){
     this.create = function () {
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.physics.p2.gravity.y=150;
-        game.physics.p2.setBounds(100,50,320,640,)
+        //game.physics.p2.setBounds(100,50,320,640,)
         // 添加瓦片地图
         // if(isPc){
             var map = game.add.tilemap('map_1');
@@ -331,25 +331,26 @@ function playState(game){
             gameOver = true;
         }
         if(gameOver){
-            createGameOverText();
+            // createGameOverText();
+            game.state.start('ball');
         }
     }
-    function createGameOverText(){
-        if(gameOverText==null){
-            // if(player.body.y==50){
-            //     playerPoint--;
-            //     player.kill();
-            //     point.text=playerPoint;
-            // }
-            // scoreSound.play();
-            gameOverText = game.add.text(game.width/2,game.height/2,'游戏结束 !!\n得分:'+'\n点击屏幕重新开始'); //+ playerPoint+
-            gameOverText.anchor.setTo(0.5);
-            gameOverText.font = 'Arial Black';
-            gameOverText.fontWeight = 'bold';
-            gameOverText.fill = '#ec008c';
-            gameOverText.fontSize=40;
-            gameOverText.setShadow(5, 5, 'rgba(0, 0, 0, 0.5)', 5);
+    // function createGameOverText(){
+    //     if(gameOverText==null){
+    //         // if(player.body.y==50){
+    //         //     playerPoint--;
+    //         //     player.kill();
+    //         //     point.text=playerPoint;
+    //         // }
+    //         // scoreSound.play();
+    //         gameOverText = game.add.text(game.width/2,game.height/2,'游戏结束 !!\n得分:'+'\n点击屏幕重新开始'); //+ playerPoint+
+    //         gameOverText.anchor.setTo(0.5);
+    //         gameOverText.font = 'Arial Black';
+    //         gameOverText.fontWeight = 'bold';
+    //         gameOverText.fill = '#ec008c';
+    //         gameOverText.fontSize=40;
+    //         gameOverText.setShadow(5, 5, 'rgba(0, 0, 0, 0.5)', 5);
 
-        }
-    }
+    //     }
+    //}
 }
