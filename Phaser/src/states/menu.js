@@ -12,10 +12,10 @@ Menu.prototype = {
     },
     loadStart: function() {
 		this.text.setText("加载中 ...");
-	},
-	fileComplete: function(progress) {
+	  },
+	  fileComplete: function(progress) {
 		this.text.setText( + progress + "%");
-	},
+	  },
 	loadComplete: function() {
         this.text.setText("启动中 ...");
         this.tips();

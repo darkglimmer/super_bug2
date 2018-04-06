@@ -213,7 +213,6 @@ MyGame.prototype = {
 		}else{
 			lives--;
 			livesText.text = 'lives: ' + lives;
-			
 			if (lives === 0)
 			{
 				gameOver();
