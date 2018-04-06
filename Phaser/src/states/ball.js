@@ -14,15 +14,14 @@ ball.prototype = {
         game.load.image('brick_2', './images/tanqiu2.png');
         game.load.image('brick_3', './images/tanqiu3.png');
         game.load.image('brick_4', './images/tanqiu4.png');
-        game.load.image('goleft', './images/左行0.png');
-        game.load.image('goright', './images/右行0.png');
-        game.load.image('starfield', './images/starfield.jpg');
+        game.load.image('go', './images/左行0.png');
+        game.load.image('back', './images/背景.png');
     },
     create:function(){
         game.physics.startSystem(Phaser.Physics.ARCADE);//开启物理引擎
         //  We check bounds collisions against all walls other than the bottom one
         game.physics.arcade.checkCollision.down = false;
-        s = game.add.tileSprite(0, 0, 640, 1136, 'starfield');
+        s = game.add.tileSprite(0, 0, 640, 1136, 'back');
         bricks = game.add.group();
         bricks.enableBody = true;
         bricks.physicsBodyType = Phaser.Physics.ARCADE;
@@ -36,7 +35,7 @@ ball.prototype = {
                 brick.body.immovable = true;//砖块不能动
             }
         }
-        paddle = game.add.sprite(game.world.centerX, 1200,'.png');
+        paddle = game.add.sprite(game.world.centerX, 1200,'go');
         paddle.anchor.setTo(0.5, 0.5);//设置木板的中心点
 
         game.physics.enable(paddle, Phaser.Physics.ARCADE);
@@ -45,7 +44,7 @@ ball.prototype = {
         paddle.body.bounce.set(1);
         paddle.body.immovable = true;
 
-        ball = game.add.sprite(game.world.centerX, paddle.y - 16, 'breakout', 'ball_1.png');
+        ball = game.add.sprite(game.world.centerX, paddle.y - 16, 'ball');
         ball.anchor.set(0.5);//指定坐标，居中.
         ball.checkWorldBounds = true;//on the Sprite to true
 
@@ -54,7 +53,7 @@ ball.prototype = {
         ball.body.collideWorldBounds = true;//它会与边界进行碰撞，到游戏区域边界就不会掉下去
         ball.body.bounce.set(1);
 
-        ball.animations.add('spin', [ 'ball_1.png', 'ball_2.png', 'ball_3.png', 'ball_4.png', 'ball_5.png' ], 50, true, false);
+        //ball.animations.add('spin', 'ball', 50, true, false);
 
         ball.events.onOutOfBounds.add(ballLost, this);//游戏对象离开世界边界发出信号
 
@@ -90,17 +89,23 @@ ball.prototype = {
             ballOnPaddle = false;
             ball.body.velocity.y = -300;
             ball.body.velocity.x = -75;
-            ball.animations.play('spin');
+            //ball.animations.play('spin');
         }    
     },
     ballLost:function(){
         lives--;
         livesText.text = 'lives: ' + lives;
-        ballOnPaddle = true;
+        if(lives == 0){
+            game.state.start('Gameover');
+        }
+        else{
+            ballOnPaddle = true;
     
-        ball.reset(paddle.body.x + 16, paddle.y - 16);
+            ball.reset(paddle.body.x + 16, paddle.y - 16);
             
-        ball.animations.stop();
+            ball.animations.stop();
+        }
+        
     },
     gameOver:function(){
         ball.body.velocity.setTo(0, 0);
