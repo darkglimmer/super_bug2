@@ -1,0 +1,52 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Super Bug</title>
+  <!-- <script type="text/javascript" src="./bundle.js"></script> -->
+  <!-- <link rel="stylesheet" href="./main.css"> -->
+  <script src="./js/image.js"></script>
+  <script src="./js/playmario.js"></script>
+  <!-- <script src="./js/app.js"></script> -->
+  <script src="./phaser.min.js"></script>
+  <script>
+    var game;
+    var flage;
+    goPC();
+    function goPC()
+    {
+      var userAgentInfo = navigator.userAgent;
+      var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+      flage = true;
+      for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0)
+        { flage = false;
+          break; }
+      }
+      return flage;
+    }
+    // 检测pc（1）或手机端（0）
+    if(flage){
+      game = new Phaser.Game(400,592,Phaser.AUTO,'container');
+    }else{
+      game = new Phaser.Game(Math.floor(window.innerWidth/16)*16,Math.floor(window.innerHeight/16)*16,Phaser.AUTO,'container');
+    }
+    game.state.add('load',loadState);
+    game.state.add('play',playMario);
+    // game.state.add('menu',menuState);
+    // game.state.add('playTwo',play_2State);
+    game.state.start('load');
+  </script>
+    
+      <style>
+            #stage{ left:50%;top:50%;margin:-200px 0 0 -400px;position:absolute;}
+        </style>
+</head>
+<body>
+        <!-- <canvas id="stage" width="600" height="400"></canvas> -->
+
+        <!-- <script src="russianblock.js"></script> -->
+</body>
+</html>
