@@ -32,6 +32,7 @@ function playball(game){
                 brick.scale.set(0.5);
                 brick.body.bounce.set(1);//反弹
                 brick.body.immovable = true;//砖块不能动
+                // game.physics.arcade.enable(brick,false);
             }
         }
         paddle = game.add.sprite(game.world.centerX, 618,'go');
@@ -61,6 +62,7 @@ function playball(game){
     },
     this.update = function () {
         // s.tilePosition.x += (game.input.speed.x / 2);
+        
         ballHitPaddle
         paddle.x = game.input.x;
     
@@ -81,19 +83,22 @@ function playball(game){
         {
             game.physics.arcade.collide(ball, paddle, ballHitPaddle, null, this);
             game.physics.arcade.collide(ball, bricks, ballHitBrick, null, this);
-        }   
-        
+        }  
+
+        if(bricks.countLiving() == 24){
+            bricks.body.velocity.x = -75;
+            bricks.body.collideWorldBounds = true;
+            game.physics.arcade.collide(brick, brick);  
+        }
+
         if(ball.body.y <0){
             gameOver = true;
         }
+        
         if(gameOver){
             ball.body.velocity.setTo(0, 0);
         }
         function ballHitPaddle(_ball,_paddle){
-            if(bricks.countLiving() == 1){
-                game.state.start("");
-            }
-            else{
                 var diff = 0;
                 if (_ball.x < _paddle.x)
                 {
@@ -113,7 +118,6 @@ function playball(game){
                     //  Add a little random X to stop it bouncing straight up!
                     _ball.body.velocity.x = 2 + Math.random() * 8;
                 }
-            }
         }
         
         function ballHitfloor(){
