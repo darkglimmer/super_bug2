@@ -20,9 +20,15 @@ function loadMario(game){
     this.preload = function () {
             game.load.image('background1','assets/img/background1.png');
             game.load.spritesheet('walk','assets/img/walk.png',120,120);
-            game.load.image('land2','assets/img/land2.gif');
+
+
+            game.load.tilemap('mario', 'assets/map1.json', null, Phaser.Tilemap.TILED_JSON);
+            game.load.image('tiles', 'assets/img/map1.png');
+            game.load.image('bug','assets/img/heidong0.png');
+            // game.load.image('land1','assets/img/land1.gif');
+            // game.load.image('land2','assets/img/land2.gif');
             game.load.image('pipe','assets/img/pipe.png');
-            game.load.image('brick1','assets/brick1.gif');
+            // game.load.image('brick1','assets/brick1.gif');
 
     }
     this.create = function(){

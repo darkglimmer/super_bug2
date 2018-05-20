@@ -1,7 +1,4 @@
-var width,height;
-var istweening = false;
-
-function playMario(game){
+function ending(game){
     var map;
     var layer;
     var player;
@@ -10,41 +7,25 @@ function playMario(game){
     // var jumpTimer = 0;
     var cursors;
     var jumpButton;
-    var currentDataString;
-
     this.init = function(){
-        //获取当前可用分辨率
-        if(!isPc){
-            game.width = Math.floor(window.innerWidth/16)*16;
-            game.height = Math.floor(window.innerHeight/16)*16;
-        }
-
-        height = game.height;
-        width = game.width;
+        game.scale.pageAlignHorizontally=true;//水平居中
     }
-    this.create = function () {
+    this.preload = function(){
+        game.load.tilemap('mario', 'assets/map1.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.image('tiles', 'assets/img/map2.png');
+        game.load.spritesheet('walk','assets/img/walk.png',120,120);
+        game.load.image('pipe','assets/img/pipe.png');
+
+    }
+    this.create = function(){
         //添加物理引擎
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        // game.physics.arcade.gravity.y = 100;
-        // game.world.scale.x = 1.5;
-        // game.world.scale.y = 1.5;
-
-
-        //背景
-        // var bg = game.add.image(0,100,'background1');
-        // bg.scale.set(1.6);//
-        // bg.fixedToCamera = true;
-
 
         // 添加地图
         map = game.add.tilemap('mario');
     
         map.addTilesetImage('SuperMarioBros-World1-1', 'tiles');
     
-        //  注意这里的索引是tiled里面显示的以瓦片为单位的坐标 tile.x tile.y不准确（可能是因为setscale
-        map.setTileLocationCallback(89, 61, 1, 1, hitpipe, this);
-        map.setTileLocationCallback(90, 61, 1, 1, hitpipe, this);
-
         layer = map.createLayer('World1');
         layer.setScale(1.5);//放大了瓦片地图，注意坐标都要改变了
         layer.resizeWorld();
@@ -55,24 +36,17 @@ function playMario(game){
         map.setCollisionBetween(20, 25);
         map.setCollisionBetween(27, 29);
         map.setCollision(40);
-        
-        // // 黑洞
-        // bug = game.add.sprite(1300,900,'bug');
-        // bug.scale.set(0.5);
-        // bug.anchor.setTo(0.5,0.5);
-        // // game.physics.arcade.enable(bug, false);
-        // // bug.body.immovable = true;
 
 
         // 添加玩家
-        player = game.add.sprite(10, -100,'walk');
-        // player = game.add.sprite(2130,1300,'walk');
+        player = game.add.sprite(10, 1400,'walk');
         player.scale.set(0.7);
         game.physics.arcade.enable(player,false);
         player.collideWorldBounds = true;
         player.body.bounce.y = 0.2;
         player.body.gravity.y = 200;
         game.time.desiredFps = 30;
+        
 
         player.animations.add('walkR',[1,2,3,4]);
         // player.body.linearDamping = 1;
@@ -81,13 +55,12 @@ function playMario(game){
         player.animations.add('left',[6,7,8,9,10,11],10,true);
 
 
-        // var tween = game.add.tween(player).from({y: 100}, 1000, Phaser.Easing.Linear.None, false,);
-        // tween.start();
+        var tween = game.add.tween(player).from({y: 1500}, 1000, Phaser.Easing.Linear.None, false,);
+        tween.start();
 
-        // 水管
-        var pipe = game.add.sprite(2110, 1460,'pipe');
+        //水管
+        var pipe = game.add.sprite(100, 1400,'pipe');
         pipe.scale.set(0.7);
-        
 
         // 按键
         cursors = game.input.keyboard.createCursorKeys();
@@ -97,39 +70,12 @@ function playMario(game){
         // 镜头跟随
         game.camera.follow(player);
 
-        // 瓦片地图坐标
-        game.input.onDown.add(getTileProperties, this);
-
-        function getTileProperties() {
-
-            var x = layer.getTileX(game.input.activePointer.worldX);
-            var y = layer.getTileY(game.input.activePointer.worldY);
-        
-            currentDataString = x + " " + y;        
-        }
-        function hitpipe(sprite, tile){
-            if(cursors.down.isDown){
-                var intopipe = game.add.tween(player.body).to({y: 1452}, 1000, Phaser.Easing.Linear.Out, false,);
-                intopipe.start();
-                intopipe.onStart.add(tweening, this);
-                intopipe.onComplete.add(next, this);
-            }
-            return true;
-        }
-
-        function next(){
-            istweening = false;
-            game.state.start('loadblock');
-        }
-        function tweening(){
-            istweening = true;
-
-        }
 
     }
-    this.update = function () {
-        // 和瓦片地图的碰撞检测
+    this.update = function(){
+    // 和瓦片地图的碰撞检测
         game.physics.arcade.collide(player, layer);
+        
         //  边界检测
         function collidebound(){
             if(player.body.x <= -10 ){
@@ -159,7 +105,7 @@ function playMario(game){
         // 响应按键
         player.body.velocity.x = 0;
 
-        if (cursors.left.isDown && !istweening)
+        if (cursors.left.isDown )
         {
             player.body.velocity.x = -200;
     
@@ -169,7 +115,7 @@ function playMario(game){
                 facing = 'left';
             }
         }
-        else if (cursors.right.isDown && !istweening)
+        else if (cursors.right.isDown )
         {
             player.body.velocity.x = 200;
     
@@ -204,22 +150,10 @@ function playMario(game){
         }
 
 
-
-       
+        // // 碰到黑洞进入下一个场景
+        // if(Math.abs(player.body.x - 1300) < 50 && Math.abs(player.body.y - 900) < 50 ){
+        //     game.state.start('loadblock');
+        // }
+        
     }
-    this.render = function () {
-
-        // game.debug.text(game.time.suggestedFps, 32, 32);
-    
-        // game.debug.text(game.time.physicsElapsed, 32, 32);
-        // game.debug.body(player);
-        game.debug.bodyInfo(player, 16, 24);
-        game.debug.cameraInfo(game.camera, 32, 100);
-
-
-
-        // game.debug.text('Tile X: ' + layer.getTileX(player.x), 32, 48, 'rgb(0,0,0)');
-        // game.debug.text('Tile Y: ' + layer.getTileY(player.y), 32, 64, 'rgb(0,0,0)');
-    }
-   
 }

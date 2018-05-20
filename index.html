@@ -16,6 +16,7 @@
   <script src="js/state/block_play.js"></script>
   <script src="js/state/ball_load.js"></script>
   <script src="js/state/ball_play.js"></script>
+  <script src="js/state/end.js"></script>
 
   <script>
     var game;
@@ -47,10 +48,12 @@
     game.state.add('playblock',playBlock);
     game.state.add('loadball',loadball);
     game.state.add('playball',playball);
+    game.state.add('ending',ending);
 
 
 //开始加载
-    game.state.start('loadgif');
+    // game.state.start('loadgif');
+    game.state.start('loadblock');
   </script>
 </head>
 <body>

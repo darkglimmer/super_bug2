@@ -24,12 +24,13 @@ function loadBlock(game){
         game.load.image('oBox','assets/img/pc/OBox.png');
         game.load.image('tBox','assets/img/pc/TBox.png');
         game.load.image('xBox','assets/img/pc/XBox.png');
+        game.load.image('bug','assets/img/heidong0.png');
+        game.load.physics("blockdata", "assets/blockdata.json");
 
-        game.load.tilemap('map_1',null,mapJson,Phaser.Tilemap.EAST);
         game.load.image('background','assets/img/map.png');
-        game.load.image('mario','assets/img/mario.png');
-        game.load.audio('ground_sound','assets/music/ground-hit.wav');
-        game.load.image('flyplayer','assets/img/fly.png');
+
+        game.load.spritesheet('walk','assets/img/walk.png',120,120);
+        game.load.image('player','assets/img/player.png');
         
     }
     this.create = function(){
