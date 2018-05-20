@@ -7,12 +7,15 @@ function playball(game){
 
     var ballOnPaddle = true;
     var s;
+    var groundSound;
     this.init = function(){
         //获取当前可用分辨率
         if(!isPc){
             game.width = Math.floor(window.innerWidth/16)*16;
             game.height = Math.floor(window.innerHeight/16)*16;
         }
+        groundSound = game.add.sound('hit');
+
         height = game.height;
         width = game.width;
     }
@@ -85,15 +88,17 @@ function playball(game){
             game.physics.arcade.collide(ball, bricks, ballHitBrick, null, this);
         }  
 
-        if(bricks.countLiving() == 24){
+        if(bricks.countLiving() == 24 && ballOnPaddle){
             bricks.body.immovable = false;
             bricks.body.velocity.x = -75;
             bricks.body.collideWorldBounds = true;
             game.physics.arcade.collide(brick, brick);
-
+            ballOnPaddle = false;
+            ball.body.velocity.y = -300;
+            ball.body.velocity.x = -75;
         }
 
-        if(ball.body.y <0){
+        if(ball.body.y < 0){
             gameOver = true;
         }
         
@@ -101,6 +106,7 @@ function playball(game){
             ball.body.velocity.setTo(0, 0);
         }
         function ballHitPaddle(_ball,_paddle){
+            groundSound.play();
                 var diff = 0;
                 if (_ball.x < _paddle.x)
                 {
@@ -111,7 +117,7 @@ function playball(game){
                 else if (_ball.x > _paddle.x)
                 {
                     //  Ball is on the right-hand side of the paddle
-                    diff = _ball.x -_paddle.x;
+                    diff =  _ball.x -_paddle.x;
                     _ball.body.velocity.x = (5 * diff);
                 }
                 else
@@ -123,9 +129,10 @@ function playball(game){
         }
         
         function ballHitfloor(){
-            game.state.start("");
+            game.state.start("");//gif
         } 
         function ballHitBrick(_ball,_brick){
+            groundSound.play();
             _brick.kill();
             if (bricks.countLiving() == -1)
             {
