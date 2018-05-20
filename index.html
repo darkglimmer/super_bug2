@@ -17,6 +17,10 @@
   <script src="js/state/ball_load.js"></script>
   <script src="js/state/ball_play.js"></script>
   <script src="js/state/end.js"></script>
+  <script src="js/state/jump_load.js"></script>
+  <script src="js/state/jump_play.js"></script>
+
+
 
   <script>
     var game;
@@ -51,7 +55,15 @@
     game.state.add('ending',ending);
 
 
+    game.state.add('loadjump',loadjump);
+    game.state.add('playjump',playjump);
+
+
+
+
 //开始加载
+    game.state.start('loadmario');
+
     // game.state.start('loadgif');
     game.state.start('loadblock');
   </script>
