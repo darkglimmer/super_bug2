@@ -3,12 +3,14 @@ function playBlock(){
     var curbox;
     var iBox,lBox,oBox,tBox,xBox;
     // var point,playerPoint=0;
-    var gameOverText;
+    var gameover = false;
     var cursors;
     var jumpButton;
     var customBounds;
     var player;
     var yAxis = p2.vec2.fromValues(0, 1);
+    var isfalling;
+    
 
     this.init = function(){
         //获取当前可用分辨率
@@ -23,10 +25,11 @@ function playBlock(){
     this.create = function () {
         //开启物理引擎
         game.physics.startSystem(Phaser.Physics.P2JS);
-        game.physics.p2.gravity.y = 150;
-        // game.physics.p2.restitution = 0.1;
+        game.physics.p2.gravity.y = 250;
+        game.physics.p2.restitution = 0;
         game.physics.p2.world.defaultContactMaterial.friction = 0.3;
         game.physics.p2.world.setGlobalStiffness(1e5);
+        game.physics.p2.setImpactEvents(true);
     
 
         //背景图片
@@ -34,13 +37,13 @@ function playBlock(){
         // background.scale.set(1.14);
 
         //设定边界
-        var bounds = new Phaser.Rectangle(80, 0, 270, 770);
-        var flash = new  Phaser.Rectangle(80, 240, 270, 530);
+        var bounds = new Phaser.Rectangle(79, 0, 275, 770);game.state
+        var flash = new  Phaser.Rectangle(79, 240, 273, 530);
 
         //让边界可见 
-        var graphics = game.add.graphics(bounds.x, bounds.y);
-        graphics.lineStyle(4, 0xffd900, 1);
-        graphics.drawRect(0, 0, bounds.width, bounds.height);
+        // var graphics = game.add.graphics(bounds.x, bounds.y);
+        // graphics.lineStyle(4, 0xffd900, 1);
+        // graphics.drawRect(0, 0, bounds.width, bounds.height);
 
         customBounds = { left: null, right: null, top: null, bottom: null };
         createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -51,99 +54,183 @@ function playBlock(){
         // bug.anchor.setTo(0.5,0.5);
         
 
+        //掉落效果
+        var tmp1 = game.add.sprite(65, 0,'player');
+        tmp1.scale.set(0.7);
+
+        var tween = game.add.tween(tmp1).to({y: 705}, 1500, Phaser.Easing.Linear.None, true);
+        tween.onStart.add(() => {
+            isfalling  = true;
+        },this);
+        tween.onComplete.add(()=>{
+            tmp1.kill();
+            player.alpha = 1;  
+            isfalling = false; 
+        }
+        ,this);
+
+
+        
+
         //添加玩家
-        player = game.add.sprite(100,730,'player');
         // player = game.add.sprite(100,800,'walk');
-        var tween = game.add.tween(player.body).to({y: 100}, 500, Phaser.Easing.Linear.None, false,);
-        tween.start();
+        player = game.add.sprite(105,730,'player');
         player.scale.set(0.7); //要先放大缩小再开启物理引擎
-
+        player.alpha = 0;
 
 
         
-        game.physics.p2.enable(player,true); // true 开始调试
+        game.physics.p2.enable(player,false); // true 开始调试
+        player.body.clearShapes();
         player.body.fixedRotation = true; //不会旋转
-        player.body.setCircle(35);
-        
+        // player.body.setCircle(35);
+        player.body.setRectangle(45, 80, 0, 0);
 
-        
+
         //掉落固定的方块 
-        // var boxarray = [[0,80],[1,125],[0,325],[2,200],[1,125],[0,100],[3,300],[4,100],[3,105],[2,325],[2,200],[1,125],[0,100],[3,300],[1,100],[2,150]]; //700
-        
-        // var boxarray = [[0,80],[0,325],[2,200],[0,150],[2,200],[0,325],[2,200],[0,325],[2,90],[0,75],[0,325],[2,200],[2,250],[0,325],[2,200],[0,150],[0,325],[2,90],[0,75],[0,80],[0,325],[2,200],[0,150],[0,80],[0,325],[2,200],[0,80],[0,325],[2,200],[0,80],[0,325],[2,200],[0,325],[2,200],[0,150],[2,250],[0,325]];
-        var boxarray =[[0,80],[0,325]];
+        var boxarray = [
+            [1,303,90],[1,166,90],
+            [1,268,-90],[1,130,-90],
+            // [2,318,0],[2,251,0],[0,201,0],
+            [2,115,0],[2,318,0],[2,250,0],[2,182,0],
+            [0,150,90],[0,283,90],
+            [0,150,90],[2,317,0],[2,250,0],
+            [2,115,0],[2,182,0],[0,283,90],
+            
+            [3,132,-90],[4,183,0],[2,318,0],
+            [2,251,0],[3,113,0],[0,283,90],
+            [0,283,90],[2,115,0],[0,283,90],
+            [1,200,-90],[2,318,0],[2,250,0],
+            [1,303,90],[1,268,-90],
+            
+
+        ]; 
         function createBox(){
             var box = boxarray.shift();
             if(!box){
-                var flashview = game.add.graphics(flash.x, flash.y);
-                flashview.beginFill(0xFFFFFF);
-                flashview.drawRect(0, 0, flash.width, flash.height);
-        var flashtween = game.add.tween(flashview).from({ alpha: 0 }, 500, Phaser.Easing.Linear.None, false, 0, 1,);
-        flashtween.start();
-
-                return;
+                return 0;
             }
+            
+            // if(boxarray.length == 1){
+                // game.time.events.add(Phaser.Timer.SECOND * 4, () => {
+                    if(player.body.y < 300 ){
+                        gameover = true;
+                        var flashview = game.add.graphics(flash.x, flash.y);
+                        flashview.beginFill(0xFFFFFF);
+                        flashview.drawRect(0, 0, flash.width, flash.height);
+        
+                        var flashtween = game.add.tween(flashview).from({ alpha: 0 }, 500, Phaser.Easing.Linear.None, false, 0, 1, true);
+                        flashtween.start();
+                        flashtween.onComplete.add(() => {
+                            player.alpha = 0;
+                            isfalling = true;
+                            var tmp2 = game.add.sprite(player.x - 37,player.y - 37,'player');
+                            tmp2.scale.set(0.7);
+                            var tween2 = game.add.tween(tmp2).to({y: 1100}, 1000, Phaser.Easing.Linear.None, true);
+                            tween2.onComplete.add(() => {
+                                game.state.start('loadball');
+                            }, this); 
+                        },this);
+                    } else if(boxarray.length == 0) {
+                        game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+                            game.add.text(120,game.height/2,'游戏结束 !!')
+                            game.time.events.add(Phaser.Timer.SECOND * 1,() => {game.state.start('playblock');},this);
+                        }, this);
+                    }
+                // }, this);
+
+            // }
             switch (box[0]){
                 case 0:
                     curbox = game.add.sprite(box[1],100,'iBox');
-                    curbox.scale.set(0.3);
-                    game.physics.p2.enable(curbox, true);
+                    game.physics.p2.enable(curbox, false);
+                    curbox.body.angle = box[2];
+
+
                 break;
                 case 1:
                     curbox = game.add.sprite(box[1],100,'lBox');
-                    curbox.scale.set(0.3);
-                    game.physics.p2.enable(curbox,true);
+                    game.physics.p2.enable(curbox,false);
                     curbox.body.clearShapes();
                     curbox.body.loadPolygon('blockdata','LBox');
+                    curbox.body.angle = box[2];
                 break;
                 case 2:
                     curbox = game.add.sprite(box[1],100,'oBox');
-                    curbox.scale.set(0.3);
-                    game.physics.p2.enable(curbox,true);
+                    game.physics.p2.enable(curbox,false);
                 break;
                 case 3:
                     curbox = game.add.sprite(box[1],100,'tBox');
-                    curbox.scale.set(0.3);
-                    game.physics.p2.enable(curbox,true);
+                    game.physics.p2.enable(curbox,false);
                     curbox.body.clearShapes();
                     curbox.body.loadPolygon('blockdata','TBox');
+                    curbox.body.angle = box[2];
                 break;
                 case 4:
                     curbox = game.add.sprite(box[1],100,'xBox');
-                    curbox.scale.set(0.3);
-                    game.physics.p2.enable(curbox,true);
+                    game.physics.p2.enable(curbox,false);
                     curbox.body.clearShapes();
                     curbox.body.loadPolygon('blockdata','XBox');
+                    curbox.body.angle = box[2];
                 break;
                 
 
             }
             // curbox.body.damping=0.01;
+
+            
             curbox.body.onBeginContact.addOnce(blockHit, this);
+            
         }
-        // 每隔1s掉落一个方块
-        game.time.events.loop(2000, function() {
-            createBox();
-        });
+        // 每隔2s掉落一个方块
+        // game.time.events.loop(1500, function() {
+        //     if(boxarray.length && !gameover)
+        //         createBox();
+        // });
 
         //碰撞檢測
         function blockHit(body, bodyB, shapeA, shapeB, equation){
             if(body){
-                // console.log(body.sprite.key);
                 if(body.sprite.key == 'player'){
                     game.add.text(120,game.height/2,'游戏结束 !!')
                     setTimeout(() => {
                         game.state.start('playblock')
                     }, 1000);
-                }
-            }  
-            // curbox.body.onBeginContact.addOnce(blockHit, this);
+                } 
+            } 
+            curbox.body.static = true;
+            curbox.body.velocity.x = 0;
+            curbox.body.velocity.y = 0;
+            curbox.body.fixedRotation = true;
+            if(boxarray.length && !gameover)
+            createBox();
         }
+        game.time.events.add(Phaser.Timer.SECOND * 1,() => {createBox();},this);
 
 
         cursors = game.input.keyboard.createCursorKeys();
         jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 
+        function touching(something) {
+            var result = false;
+            for (var i=0; i < game.physics.p2.world.narrowphase.contactEquations.length; i++)
+            {
+                var c = game.physics.p2.world.narrowphase.contactEquations[i];
+                if (c.bodyA === something.data || c.bodyB === something.data)
+                {
+                    var d = p2.vec2.dot(c.normalA, yAxis);
+                    if (c.bodyA === something.data)
+                    {
+                        d *= -1;
+                    }
+                    if (d > 0.5)
+                    {
+                        result = true;
+                    }
+                }
+            }
+            return result;
+        }
 
 
         //设边界 
@@ -176,20 +263,24 @@ function playBlock(){
             sim.world.addBody(customBounds.bottom);
         
         }
-
+        
 
     }
     this.update = function () {
 
-        // if(player.body.y < 200){
-        //     game.state.start('loadball');
-        // }
+        game.world.bringToTop(player);
+        game.input.onDown.add(function(e) {  
+            if( checkIfCanJump() && !isfalling){
+                player.body.moveUp(240);
+            }
+        }, this)
+
 
         player.body.velocity.x = 0;
 
-        if (cursors.left.isDown)
+        if ((cursors.left.isDown || game.input.worldX < player.body.x ) && !isfalling)
         {
-            player.body.velocity.x = -200;
+            player.body.moveLeft(250);
     
             // if (facing != 'left' )
             // {
@@ -197,9 +288,9 @@ function playBlock(){
             //     facing = 'left';
             // }
         }
-        else if (cursors.right.isDown )
+        else if ((cursors.right.isDown || game.input.worldX - 15 > player.body.x )&& !isfalling)
         {
-            player.body.velocity.x = 200;
+            player.body.moveRight(250);
     
             // if (facing != 'right' )
             // {
@@ -226,9 +317,9 @@ function playBlock(){
             // }
         }
         
-        if (jumpButton.isDown && checkIfCanJump())
+        if (jumpButton.isDown && checkIfCanJump() && !isfalling)
         {
-            player.body.velocity.y = -230;
+            
         }
 
 

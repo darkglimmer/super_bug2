@@ -25,7 +25,7 @@ function loadBlock(game){
         game.load.image('tBox','assets/img/pc/TBox.png');
         game.load.image('xBox','assets/img/pc/XBox.png');
         game.load.image('bug','assets/img/heidong0.png');
-        game.load.physics("blockdata", "assets/blockdata.json");
+        game.load.physics("blockdata", "assets/blockdatas.json");
 
         game.load.image('background','assets/img/map.png');
 

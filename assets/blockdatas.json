@@ -1,5 +1,19 @@
 { 
     
+    "LBox": [
+        
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   0, 0  ,  67, 0  ,  33, 34  ,  0, 34  ]
+        } ,
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   33, 34  ,  67, 0  ,  67, 100  ,  33, 100  ]
+        }
+    ]
+    , 
     "TBox": [
         
         {
@@ -27,31 +41,7 @@
             "shape": [   33, 67  ,  0, 67  ,  0, 0  ,  34, 0  ]
         }
     ]
-    , 
-    "LBox": [
-        
-        {
-            "density": 2, "friction": 0, "bounce": 0, 
-            "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   0, 0  ,  67, 0  ,  33, 34  ,  0, 34  ]
-        } ,
-        {
-            "density": 2, "friction": 0, "bounce": 0, 
-            "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   33, 34  ,  67, 0  ,  67, 100  ,  33, 100  ]
-        } ,
-        {
-            "density": 2, "friction": 0, "bounce": 0, 
-            "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   0, 0  ,  67, 0  ,  33, 34  ,  0, 34  ]
-        } ,
-        {
-            "density": 2, "friction": 0, "bounce": 0, 
-            "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   33, 34  ,  67, 0  ,  67, 100  ,  33, 100  ]
-        }
-    ]
-    , 
+    ,
     "player": [
         
         {

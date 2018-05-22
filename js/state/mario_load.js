@@ -29,6 +29,7 @@ function loadMario(game){
             // game.load.image('land2','assets/img/land2.gif');
             game.load.image('pipe','assets/img/pipe.png');
             // game.load.image('brick1','assets/brick1.gif');
+            game.load.spritesheet('enemy','assets/img/monster.png',60,60);
 
     }
     this.create = function(){

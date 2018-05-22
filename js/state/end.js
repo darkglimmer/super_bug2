@@ -7,6 +7,7 @@ function ending(game){
     // var jumpTimer = 0;
     var cursors;
     var jumpButton;
+    var istweening = true;
     this.init = function(){
         game.scale.pageAlignHorizontally=true;//水平居中
     }
@@ -39,7 +40,7 @@ function ending(game){
 
 
         // 添加玩家
-        player = game.add.sprite(10, 1400,'walk');
+        player = game.add.sprite(2115,1370,'walk');
         player.scale.set(0.7);
         game.physics.arcade.enable(player,false);
         player.collideWorldBounds = true;
@@ -55,11 +56,14 @@ function ending(game){
         player.animations.add('left',[6,7,8,9,10,11],10,true);
 
 
-        var tween = game.add.tween(player).from({y: 1500}, 1000, Phaser.Easing.Linear.None, false,);
+        var tween = game.add.tween(player.body).from({y: 1452}, 1000, Phaser.Easing.Linear.None, false,);
         tween.start();
+        tween.onComplete.add(() => {
+            istweening = false;
+        }, this);
 
         //水管
-        var pipe = game.add.sprite(100, 1400,'pipe');
+        var pipe = game.add.sprite(2110, 1460, 'pipe');
         pipe.scale.set(0.7);
 
         // 按键
@@ -69,6 +73,12 @@ function ending(game){
 
         // 镜头跟随
         game.camera.follow(player);
+        game.input.onDown.add(function(e) {  
+  
+            if(player.body.onFloor()&&!istweening){
+                player.body.velocity.y = -250;
+            }
+        }, this)
 
 
     }
@@ -90,7 +100,7 @@ function ending(game){
             } else if(player.body.y >= game.world.height ){
                 game.add.text(player.body.x-50,game.world.height-700,'游戏结束 !!')
                 setTimeout(() => {
-                    game.state.start('playmario')
+                    game.state.start('ending')
                 }, 1000);
                 return false;
                 //or gameover
@@ -105,7 +115,8 @@ function ending(game){
         // 响应按键
         player.body.velocity.x = 0;
 
-        if (cursors.left.isDown )
+
+        if ((cursors.left.isDown || game.input.worldX < player.body.x  )&& !istweening)
         {
             player.body.velocity.x = -200;
     
@@ -115,7 +126,7 @@ function ending(game){
                 facing = 'left';
             }
         }
-        else if (cursors.right.isDown )
+        else if ((cursors.right.isDown || game.input.worldX - 15 > player.body.x ) && !istweening)
         {
             player.body.velocity.x = 200;
     
@@ -149,11 +160,6 @@ function ending(game){
             player.body.velocity.y = -250;
         }
 
-
-        // // 碰到黑洞进入下一个场景
-        // if(Math.abs(player.body.x - 1300) < 50 && Math.abs(player.body.y - 900) < 50 ){
-        //     game.state.start('loadblock');
-        // }
-        
     }
+
 }

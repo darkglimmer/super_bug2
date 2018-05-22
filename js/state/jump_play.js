@@ -16,7 +16,7 @@ function playjump(game){
     var hole;
     var isRun = false;
     var playerOnfloor = true;
-    atlas = game.add.group();
+    
     this.init = function(){
         //获取当前可用分辨率
         if(!isPc){

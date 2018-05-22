@@ -11,6 +11,7 @@ function playMario(game){
     var cursors;
     var jumpButton;
     var currentDataString;
+    var enemy1,enemy2;
 
     this.init = function(){
         //获取当前可用分辨率
@@ -70,9 +71,10 @@ function playMario(game){
         player.scale.set(0.7);
         game.physics.arcade.enable(player,false);
         player.collideWorldBounds = true;
-        player.body.bounce.y = 0.2;
+        // player.body.bounce.y = 0.2;
         player.body.gravity.y = 200;
-        game.time.desiredFps = 30;
+        // game.time.desiredFps = 30;
+        player.body.width = 60;
 
         player.animations.add('walkR',[1,2,3,4]);
         // player.body.linearDamping = 1;
@@ -87,7 +89,27 @@ function playMario(game){
         // 水管
         var pipe = game.add.sprite(2110, 1460,'pipe');
         pipe.scale.set(0.7);
+        pipe.inputEnabled = true;
+        pipe.events.onInputDown.add(next, this);
         
+
+
+        //敌人
+        enemy1 = game.add.sprite(20, 1452,'enemy');
+        game.physics.arcade.enable(enemy1,false);
+        enemy1.collideWorldBounds = true;
+        enemy1.body.gravity.y = 200;
+        enemy1.body.velocity.x = 100;
+        enemy1.animations.add('move',[0,1],5,true);
+        enemy1.animations.play('move');
+
+        enemy2 = game.add.sprite(1300, 1452,'enemy');
+        game.physics.arcade.enable(enemy2,false);
+        enemy2.collideWorldBounds = true;
+        enemy2.body.gravity.y = 200;
+        enemy2.body.velocity.x = 100;
+        enemy2.animations.add('move',[0,1],5,true);
+        enemy2.animations.play('move');
 
         // 按键
         cursors = game.input.keyboard.createCursorKeys();
@@ -97,39 +119,71 @@ function playMario(game){
         // 镜头跟随
         game.camera.follow(player);
 
-        // 瓦片地图坐标
-        game.input.onDown.add(getTileProperties, this);
-
-        function getTileProperties() {
-
-            var x = layer.getTileX(game.input.activePointer.worldX);
-            var y = layer.getTileY(game.input.activePointer.worldY);
-        
-            currentDataString = x + " " + y;        
-        }
         function hitpipe(sprite, tile){
             if(cursors.down.isDown){
-                var intopipe = game.add.tween(player.body).to({y: 1452}, 1000, Phaser.Easing.Linear.Out, false,);
-                intopipe.start();
-                intopipe.onStart.add(tweening, this);
-                intopipe.onComplete.add(next, this);
+                next();
             }
             return true;
         }
-
         function next(){
-            istweening = false;
-            game.state.start('loadblock');
+            if(player.body.x > 2100 && player.body.x < 2140){
+                var intopipe = game.add.tween(player.body).to({y: 1452}, 1000, Phaser.Easing.Linear.Out, false,);
+                intopipe.start();
+                intopipe.onStart.add(() => {
+                    istweening = true;
+                }, this);
+                intopipe.onComplete.add(() => {
+                    istweening = false;
+                    game.state.start('loadblock');
+                }, this)
+            }
+;
         }
-        function tweening(){
-            istweening = true;
+        game.input.onDown.add(function(e) {  
+  
+            // if(e.clientX < player.x) {  
+            //     player.body.velocity.x = -200;  
+            // } else {  
+            //     player.body.velocity.x = 200;  
+            // }  
 
-        }
+            // if(e.clientY < game.height / 3 * 2 && player.body.onFloor()) {  
+            //     player.body.velocity.y = -200;  
+            // }  
+
+            if(player.body.onFloor()&&!istweening){
+                player.body.velocity.y = -250;
+            }
+        }, this)
 
     }
     this.update = function () {
+
+
+
         // 和瓦片地图的碰撞检测
         game.physics.arcade.collide(player, layer);
+        game.physics.arcade.collide(enemy1, layer);
+        game.physics.arcade.collide(player, enemy1, hitenemy);
+
+        game.physics.arcade.collide(enemy2, layer);
+        game.physics.arcade.collide(player, enemy2,hitenemy);
+
+        if(enemy1.body.x > 500 || enemy1.body.x < 10){
+            enemy1.body.velocity.x *= -1;
+        }
+        if(enemy2.body.x > 1800 || enemy2.body.x < 1100){
+            enemy2.body.velocity.x *= -1;
+        }
+        function hitenemy(_player, _enemy){
+            if(!_enemy.body.touching.up){
+                game.add.text(player.body.x,game.world.height-700,'游戏结束 !!')
+                game.time.events.add(Phaser.Timer.SECOND * 1,() => {game.state.start('playmario');},this);
+            }else{
+                _enemy.kill();
+            }
+            return true;
+        }
         //  边界检测
         function collidebound(){
             if(player.body.x <= -10 ){
@@ -159,7 +213,7 @@ function playMario(game){
         // 响应按键
         player.body.velocity.x = 0;
 
-        if (cursors.left.isDown && !istweening)
+        if ((cursors.left.isDown || game.input.worldX < player.body.x  )&& !istweening)
         {
             player.body.velocity.x = -200;
     
@@ -169,7 +223,7 @@ function playMario(game){
                 facing = 'left';
             }
         }
-        else if (cursors.right.isDown && !istweening)
+        else if ((cursors.right.isDown || game.input.worldX - 15 > player.body.x ) && !istweening)
         {
             player.body.velocity.x = 200;
     
@@ -205,6 +259,8 @@ function playMario(game){
 
 
 
+
+
        
     }
     this.render = function () {
@@ -212,9 +268,11 @@ function playMario(game){
         // game.debug.text(game.time.suggestedFps, 32, 32);
     
         // game.debug.text(game.time.physicsElapsed, 32, 32);
+        // game.debug.inputInfo(32, 300);
         // game.debug.body(player);
-        game.debug.bodyInfo(player, 16, 24);
-        game.debug.cameraInfo(game.camera, 32, 100);
+        // game.debug.body(enemy1);
+        // game.debug.bodyInfo(player, 16, 24);
+        // game.debug.cameraInfo(game.camera, 32, 100);
 
 
 
