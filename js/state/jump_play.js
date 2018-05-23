@@ -11,11 +11,15 @@ function playjump(game){
     var music_1;
     var music_2;
     var music_3;
-    var atlas;
+    var platform_0;
+    var platform_1;
+    var platform_2;
+    var platform_3;
     var spring;
     var hole;
     var isRun = false;
     var playerOnfloor = true;
+    var cursors;
     this.init = function(){
         //获取当前可用分辨率
         if(!isPc){
@@ -29,76 +33,121 @@ function playjump(game){
         width = game.width;
     }
     this.create = function(){
-        game.add.image(0,0,'background');
-        game.world.setBounds(0, 0, 660, 2000);//修改尺寸
-        game.physics.startSystem(Phaser.Physics.ARCADE);//开启物理引擎
-        //地板
-        atlas = game.add.group();
-        for (var i = 0; i < 60; i++)
+        game.add.tileSprite(0, 0, 640, 3200, 'background');
+        game.world.setBounds(0, 0, 640, 3200);//修改尺寸
+        game.physics.startSystem(Phaser.Physics.P2JS);
+
+        player = game.add.sprite(game.world.centerX, 3200, 'person');
+         game.physics.enable(player, Phaser.Physics.ARCADE);
+        // player.anchor.x = 0.5;
+        player.body.gravity.y = 300;
+        if (playerOnfloor)
         {
-            atlas.create(game.world.randomX, game.world.randomY, 'platform_0');
-        }
-        for (var i = 0; i < 20; i++)
+            player.body.velocity.y = -400;
+            playerOnfloor = false;
+        }    
+        player.scale.set(0.5);//设置图片大小
+
+
+        game.physics.p2.enable(player);
+        player.body.fixedRotation = true;
+        cursors = game.input.keyboard.createCursorKeys();
+
+        game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+        game.setBoundsToWorld()
+
+
+        platform_0 = game.add.group();
+        platform_0.enableBody = true;
+        platform_0.physicsBodyType = Phaser.Physics.ARCADE;
+        spring = game.add.group();
+        spring.enableBody = true;
+        spring.physicsBodyType = Phaser.Physics.ARCADE;    
+
+
+        var platform;
+        for (var i = 0; i < 30; i++)
         {
-            atlas.create(game.world.randomX, game.world.randomY, 'platform_3');
-        }
-        for (var i = 0; i < 15; i++)
-        {
-            atlas.create(game.world.randomX, game.world.randomY, 'platform_1');
-        }
-        for (var i = 0; i < 5; i++)
-        {
-            atlas.create(game.world.randomX, game.world.randomY, 'platform_2');
+            platform = platform_0.create(game.world.randomX, game.world.randomY, 'platform_0');
+            if(i == 8 || i == 13 || i == 18 || i == 26){
+                //string.create(platform.x, platform.y - 10, 'string');
+            }
+            platform.scale.set(0.2);
+            platform.body.bounce.set(1);
+            //platform.body.immovable = true;//砖块不能动
+
         }
 
-        //弹簧
-        spring = game.add.group();
-        //黑洞
-        hole = game.add.sprite(this.world.randomX, 0, 'atlas','hole');
-		hole.visible = false;
-		hole.anchor.set(0.5);
-        hole.scale.set(gameScale);
-        game.physics.enable(hole, Phaser.Physics.ARCADE);
+        platform_3 = game.add.group();
+        platform_3.enableBody = true;
+        platform_3.physicsBodyType = Phaser.Physics.ARCADE;
+        for (var i = 0; i < 15; i++)
+        {
+            platform = platform_3.create(game.world.randomX, game.world.randomY, 'platform_3');
+            platform.scale.set(0.2);
+            platform.body.bounce.set(1);
+            //platform.body.immovable = true;//砖块不能动
+
+        }
+
+        platform_1 = game.add.group();
+        platform_1.enableBody = true;
+        platform_1.physicsBodyType = Phaser.Physics.ARCADE;        
+        for (var i = 0; i < 10; i++)
+        {
+            platform = platform_1.create(game.world.randomX, game.world.randomY, 'platform_1');
+            platform.scale.set(0.2);
+            platform.body.bounce.set(1);
+            //platform.body.immovable = true;//砖块不能动
+
+        }
+        platform_2 = game.add.group();
+        platform_2.enableBody = true;
+        platform_2.physicsBodyType = Phaser.Physics.ARCADE;         
+        for (var i = 0; i < 5; i++)
+        {
+            platform = platform_2.create(game.world.randomX, game.world.randomY, 'platform_2');
+            platform.scale.set(0.2);
+            platform.body.bounce.set(1);
+            //platform.body.immovable = true;//砖块不能动
+
+        }
         
-        game.physics.enable(atlas, Phaser.Physics.ARCADE);
-        brick.body.bounce.set(1);//反弹
-		atlas.body.collideWorldBounds = false;
-		atlas.body.velocity.x = l(0, 1) == 0 ? 200 : -200;
-		atlas.body.moves = false;
         
-        player = game.add.sprite(game.world.centerX, 1000,'person');
-        player.anchor.x = 0.5;
+        hole = game.add.group();
+        hole.enableBody = true;
+        hole.physicsBodyType = Phaser.Physics.ARCADE;    
+        for (var i = 0; i < 3; i++)
+        {
+            platform = hole.create(game.world.randomX, game.world.randomY, 'hole');
+            platform.scale.set(0.3);
+            platform.body.bounce.set(1);
+            //platform.body.immovable = true;//砖块不能动
+
+        }
+        
+        // game.physics.enable(atlas, Phaser.Physics.ARCADE);
+		// // atlas.body.velocity.x = l(0, 1) == 0 ? 200 : -200;
+        
+        // player = game.add.sprite(game.world.centerX, 1000,'person');
+       
         player.body.outOfCameraBoundsKill = true;
 		player.body.autoCull = true;
 		player.events.onKilled.add(function(sprite){
-            //出现死亡界面
+            出现死亡界面
             this.gameEnd(false);
         },this);
-        game.physics.enable(player, Phaser.Physics.ARCADE);
-        //设置重力
-        player.body.gravity.y = 300;
-        player.body.velocity.y = -100;
-        //player.scale.set(0.5);设置图片大小
-
-
-        game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1);
-        cursors = game.input.keyboard.createCursorKeys();
-        fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-       
         
-        //开启鼠标事件
-        game.input.mouse.capture = true;
-        isRun = true;
 
-        game.mouseSprite = this.add.sprite(0,0);
-		game.mouseSprite.visible = false;
-        game.physics.arcade.enable(this.mouseSprite);
         
-        if (playerOnfloor)
-        {
-            playerOnfloor = false;
-            player.body.velocity.y = -100;
-        }    
+        // 开启鼠标事件
+        // game.input.mouse.capture = true;
+        // isRun = true;
+
+        // game.mouseSprite = this.add.sprite(0,0);
+		// game.mouseSprite.visible = false;
+        // game.physics.arcade.enable(this.mouseSprite);
+        
         
     },
     this.update = function(){
@@ -122,56 +171,20 @@ function playjump(game){
             player.scale.y = 1;
         }
 
-        if (fireButton.isDown)
-        {
-            fireBullet();
-        }
-
-        playerHitPlatform
-
         game.physics.arcade.collide(player, platform_0, PlayerHitPlatform_0, null, this);
         game.physics.arcade.collide(player, platform_3, PlayerHitPlatform_3, null, this);
         game.physics.arcade.collide(player, platform_1, PlayerHitPlatform_1, null, this);
-
+        game.physics.arcade.collide(player, hole, PlayerOnHole, null, this);
         
 
         function PlayerHitPlatform_0(_player,_platform){
             music_1.play();
-            _player.body.velocity.y = -150;
-                var diff = 0;
-                if (_player.x < _platform.x)
-                {
-                    diff = _platform.x - _player.x;
-                    _player.body.velocity.x = (-5 * diff);
-                }
-                else if (_player.x > _platform.x)
-                {
-                    diff =  _player.x -_platform.x;
-                    _player.body.velocity.x = (5 * diff);
-                }
-                else
-                {
-                    _player.body.velocity.x = 2 + Math.random() * 8;
-                }
+            _player.body.velocity.y = -400;
         }
 
         function PlayerHitPlatform_3(_player,_platform){
             music_1.play();
-            _player.body.velocity.y = -150;
-            if (_player.x < _platform.x)
-                {
-                    diff = _platform.x - _player.x;
-                    _player.body.velocity.x = (-5 * diff);
-                }
-                else if (_player.x > _platform.x)
-                {
-                    diff =  _player.x -_platform.x;
-                    _player.body.velocity.x = (5 * diff);
-                }
-                else
-                {
-                    _player.body.velocity.x = 2 + Math.random() * 8;
-                }
+            _player.body.velocity.y = -400;
             _platform.kill();
         }
 
@@ -181,16 +194,20 @@ function playjump(game){
 			_platform.body.collideWorldBounds = true;
 			_platform.body.onWorldBounds = null;
             _platform.body.bounce.x = 1;
-            _player.body.velocity.y = -150;
+            _player.body.velocity.y = -400;
         }
 
         function PlayerHitPlatform_2(_player,_platform){
             music_1.play();
-            _player.body.velocity.y = -150;
+            _player.body.velocity.y = -400;
             _platform.kill();
         }
+        function PlayerOnHole(_player,_platform){
+            music_3.play();
+            _player.body.velocity.y = 0;
+            _player.kill();
+        }
         
-    }
-
+     }
 };
 
