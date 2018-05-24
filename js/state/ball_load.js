@@ -18,6 +18,10 @@ function loadball(game){
     }
     this.preload = function () {
         game.load.image('ball', 'assets/img/ball.png');
+        game.load.image('person','assets/img/player.png')
+        game.load.image('plank','assets/img/paddle.png')
+        game.load.image('wallleft','assets/img/wallleft.png')
+        game.load.image('wallright','assets/img/wallright.png')
         game.load.image('brick_1', 'assets/img/tanqiu1.png');
         game.load.image('brick_2', 'assets/img/tanqiu2.png');
         game.load.image('brick_3', 'assets/img/tanqiu3.png');
