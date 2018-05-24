@@ -31,6 +31,7 @@ function loadBlock(game){
 
         game.load.spritesheet('walk','assets/img/walk.png',120,120);
         game.load.image('player','assets/img/player.png');
+        game.load.audio('hitsound','assets/music/ground-hit.wav');
         
     }
     this.create = function(){
