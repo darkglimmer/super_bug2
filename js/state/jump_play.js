@@ -37,16 +37,18 @@ function playjump(game){
         game.world.setBounds(0, 0, 640, 3200);//修改尺寸
         game.physics.startSystem(Phaser.Physics.P2JS);
 
-        player = game.add.sprite(game.world.centerX, 3200, 'person');
-         game.physics.enable(player, Phaser.Physics.ARCADE);
+        player = game.add.sprite(game.world.centerX, 3170, 'person');
+        game.physics.enable(player, Phaser.Physics.ARCADE);
         // player.anchor.x = 0.5;
         player.body.gravity.y = 300;
-        if (playerOnfloor)
-        {
-            player.body.velocity.y = -400;
+        if(playerOnfloor){
+            player.body.velocity.y = -500;
             playerOnfloor = false;
-        }    
+        }
         player.scale.set(0.5);//设置图片大小
+        player.body.collideWorldBounds = true;
+        player.body.outOfCameraBoundsKill = true;
+		// player.body.autoCull = true;
 
 
         game.physics.p2.enable(player);
@@ -54,7 +56,6 @@ function playjump(game){
         cursors = game.input.keyboard.createCursorKeys();
 
         game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
-        game.setBoundsToWorld()
 
 
         platform_0 = game.add.group();
@@ -68,10 +69,7 @@ function playjump(game){
         var platform;
         for (var i = 0; i < 30; i++)
         {
-            platform = platform_0.create(game.world.randomX, game.world.randomY, 'platform_0');
-            if(i == 8 || i == 13 || i == 18 || i == 26){
-                //string.create(platform.x, platform.y - 10, 'string');
-            }
+            platform = platform_0.create(game.world.randomX, game.world.randomY, 'platform_0'); 
             platform.scale.set(0.2);
             platform.body.bounce.set(1);
             //platform.body.immovable = true;//砖块不能动
@@ -126,17 +124,11 @@ function playjump(game){
 
         }
         
-        // game.physics.enable(atlas, Phaser.Physics.ARCADE);
-		// // atlas.body.velocity.x = l(0, 1) == 0 ? 200 : -200;
-        
-        // player = game.add.sprite(game.world.centerX, 1000,'person');
-       
-        player.body.outOfCameraBoundsKill = true;
-		player.body.autoCull = true;
-		player.events.onKilled.add(function(sprite){
-            出现死亡界面
-            this.gameEnd(false);
-        },this);
+            
+		// player.events.onKilled.add(function(sprite){
+        //     出现死亡界面
+        //     this.gameEnd(false);
+        // },this);
         
 
         
@@ -178,29 +170,65 @@ function playjump(game){
         
 
         function PlayerHitPlatform_0(_player,_platform){
-            music_1.play();
-            _player.body.velocity.y = -400;
+            if(_platform.y > _player.y){
+                music_1.play();
+                _player.body.velocity.y = -400;
+            }
+            else{
+                music_1.play();
+                _player.body.velocity.y = 300;
+            }
+            
         }
 
         function PlayerHitPlatform_3(_player,_platform){
-            music_1.play();
-            _player.body.velocity.y = -400;
-            _platform.kill();
+            if(_platform.y > _player.y){
+                music_1.play();
+                _player.body.velocity.y = -400;
+                _platform.kill();
+            }
+            else{
+                music_1.play();
+                _player.body.velocity.y = 300;
+                _platform.kill();
+
+            }
+            
         }
 
         function PlayerHitPlatform_1(_player,_platform){
-            music_1.play();  
-            _platform.body.moves = true;
-			_platform.body.collideWorldBounds = true;
-			_platform.body.onWorldBounds = null;
-            _platform.body.bounce.x = 1;
-            _player.body.velocity.y = -400;
+            if(_platform.y > _player.y){
+                music_1.play();  
+                _platform.body.moves = true;
+			    _platform.body.collideWorldBounds = true;
+			    _platform.body.onWorldBounds = null;
+                _platform.body.bounce.x = 1;
+                _player.body.velocity.y = -400;
+            }
+            else{
+                music_1.play();  
+                _platform.body.moves = true;
+			    _platform.body.collideWorldBounds = true;
+			    _platform.body.onWorldBounds = null;
+                _platform.body.bounce.x = 1;
+                _player.body.velocity.y = 300;
+            }
+            
         }
 
         function PlayerHitPlatform_2(_player,_platform){
-            music_1.play();
-            _player.body.velocity.y = -400;
-            _platform.kill();
+            if(_platform.y > _player.y){
+                music_1.play();
+                _player.body.velocity.y = -400;
+                _platform.kill();
+            }
+            else{
+                music_1.play();
+                _player.body.velocity.y = 300;
+                _platform.kill();
+            }
+           
+            
         }
         function PlayerOnHole(_player,_platform){
             music_3.play();
