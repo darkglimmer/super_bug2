@@ -42,7 +42,7 @@
     if(flage){
       game = new Phaser.Game(640,1136,Phaser.AUTO,'container');
     }else{
-      game = new Phaser.Game(Math.floor(window.innerWidth/16),Math.floor(window.innerHeight/16),Phaser.AUTO,'container');
+      game = new Phaser.Game(window.innerWidth,window.innerHeight,Phaser.AUTO,'container');
     }
 //增加游戏状态
     game.state.add('loadgif',loadgif);  
@@ -62,7 +62,7 @@
 
 
 //开始加载
-    game.state.start('loadmario');
+    game.state.start('loadgif');
   </script>
 </head>
 <body>

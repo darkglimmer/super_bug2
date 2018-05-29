@@ -13,6 +13,7 @@ function playMario(game){
     var enemy1,enemy2,enemy;
     var istweening;
     var bgm;
+    var kill;
 
     var ene = [[20,1452],[1300,1452],[250,960]];
 
@@ -305,7 +306,7 @@ function playMario(game){
     
         // game.debug.text(game.time.physicsElapsed, 32, 32);
         // game.debug.inputInfo(32, 300);
-        game.debug.body(player);
+        // game.debug.body(player);
         // game.debug.body(enemy2);
         // game.debug.bodyInfo(player, 16, 24);
         // game.debug.cameraInfo(game.camera, 32, 100);

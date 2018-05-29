@@ -17,7 +17,7 @@ function loadgif(game){
         ani.play('play');
 
         function startgame(){
-            game.state.start('loadmario');
+            game.state.start('loadblock');
         }
         
 

@@ -1,4 +1,5 @@
 var width,height;
+// 随机掉落+方块掉落后可动
 function playBlock(){
     var curbox;
     var iBox,lBox,oBox,tBox,xBox;
@@ -91,34 +92,36 @@ function playBlock(){
 
 
         //掉落固定的方块 
-        var boxarray = [
-            [1,303,90],[0,150,90],
-            [1,268,-90],[1,166,90],[1,130,-90],
-            // [2,318,0],[2,251,0],[0,201,0],
-            // [2,115,0],[2,318,0],
-            [2,250,0],
-            [3,132,-90],
-            // [2,182,0],
-            [0,283,90],
-            [0,150,90],[2,317,0],[2,250,0],
-            [2,115,0],[2,182,0],[0,283,90],
+        // var boxarray = [
+        //     [1,303,90],[0,150,90],
+        //     [1,268,-90],[1,166,90],[1,130,-90],
+        //     // [2,318,0],[2,251,0],[0,201,0],
+        //     // [2,115,0],[2,318,0],
+        //     [2,250,0],
+        //     [3,132,-90],
+        //     // [2,182,0],
+        //     [0,283,90],
+        //     [0,150,90],[2,317,0],[2,250,0],
+        //     [2,115,0],[2,182,0],[0,283,90],
             
-            [3,132,-90],[4,183,0],[2,318,0],
-            [2,251,0],[3,113,0],[0,283,90],
-            [0,283,90],[2,115,0],[0,283,90],
-            [1,200,-90],[2,318,0],[2,250,0],
-            [1,303,90],[1,268,-90],
+        //     [3,132,-90],[4,183,0],[2,318,0],
+        //     [2,251,0],[3,113,0],[0,283,90],
+        //     [0,283,90],[2,115,0],[0,283,90],
+        //     [1,200,-90],[2,318,0],[2,250,0],
+        //     [1,303,90],[1,268,-90],
         
-        ]; 
+        // ]; 
+
         function createBox(){
-            var box = boxarray.shift();
-            if(!box){
-                return 0;
-            }
+            var random = Math.floor(Math.random()*5);
+            // var box = boxarray.shift();
+            // if(!box){
+            //     return 0;
+            // }
             
             // if(boxarray.length == 1){
                 // game.time.events.add(Phaser.Timer.SECOND * 4, () => {
-                    if(player.body.y < 300 ){
+                    if(player.body.y < 700 ){
                         gameover = true;
                         flashview = game.add.graphics(flash.x, flash.y);
                         flashview.beginFill(0xFFFFFF);
@@ -136,45 +139,57 @@ function playBlock(){
                                 game.state.start('loadball');
                             }, this); 
                         },this);
-                    } else if(boxarray.length == 0) {
-                        game.time.events.add(Phaser.Timer.SECOND * 2, () => {
-                            game.add.text(120,game.height/2,'游戏结束 !!')
-                            game.time.events.add(Phaser.Timer.SECOND * 1,() => {game.state.start('playblock');},this);
-                        }, this);
+                    // } else if(boxarray.length == 0) {
+                    //     game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+                    //         game.add.text(120,game.height/2,'游戏结束 !!')
+                    //         game.time.events.add(Phaser.Timer.SECOND * 1,() => {game.state.start('playblock');},this);
+                    //     }, this);
                     }
                 // }, this);
 
             // }
-            switch (box[0]){
+            // switch (box[0]){
+                switch(random){
                 case 0:
-                    curbox = game.add.sprite(box[1],100,'iBox');
+                    // curbox = game.add.sprite(box[1],100,'iBox');
+                    curbox = game.add.sprite(width/2,100,'iBox');
                     game.physics.p2.enable(curbox, false);
-                    curbox.body.angle = box[2];
+                    // curbox.body.angle = box[2];
                     curbox.body.velocity.y = 40;
 
                 break;
                 case 1:
-                    curbox = game.add.sprite(box[1],100,'lBox');
+                    // curbox = game.add.sprite(box[1],100,'lBox');
+
+                    curbox = game.add.sprite(width/2,100,'lBox');
                     game.physics.p2.enable(curbox,false);
-                    initblock(curbox,box[2]);
+                    // initblock(curbox,box[2]);
+                    curbox.body.clearShapes();
                     curbox.body.loadPolygon('blockdata','LBox');
                 break;
                 case 2:
-                    curbox = game.add.sprite(box[1],100,'oBox');
+                    // curbox = game.add.sprite(box[1],100,'oBox');
+                    curbox = game.add.sprite(width/2,100,'oBox');
                     game.physics.p2.enable(curbox,false);
                     curbox.body.velocity.y = 40;
                 break;
                 case 3:
-                    curbox = game.add.sprite(box[1],100,'tBox');
+                    // curbox = game.add.sprite(box[1],100,'tBox');
+                    curbox = game.add.sprite(width/2,100,'tBox');
                     game.physics.p2.enable(curbox,false);
+                    curbox.body.clearShapes();
                     
-                    initblock(curbox,box[2]);
+                    // initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','TBox');
                 break;
                 case 4:
-                    curbox = game.add.sprite(box[1],100,'xBox');
+                    // curbox = game.add.sprite(box[1],100,'xBox');
+                    curbox = game.add.sprite(width/2,100,'xBox');
                     game.physics.p2.enable(curbox,false);
-                    initblock(curbox,box[2]);
+                    // initblock(curbox,box[2]);
+                    curbox.body.clearShapes();
+                    // game.physics.p2.enable(curbox,false);
+                    // initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','XBox');
 
                 break;
@@ -209,12 +224,12 @@ function playBlock(){
                 } 
             } 
             hitSound.play();
-            curbox.body.static = true;
-            // curbox.body.velocity.x = 0;
-            curbox.body.y -= 5;
-            curbox.body.velocity.y = 0;
-            curbox.body.fixedRotation = true;
-            if(boxarray.length && !gameover)
+            // curbox.body.static = true;
+            // // curbox.body.velocity.x = 0;
+            // curbox.body.y -= 5;
+            // curbox.body.velocity.y = 0;
+            // curbox.body.fixedRotation = true;
+            // if(boxarray.length && !gameover)
             createBox();
         }
         game.time.events.add(Phaser.Timer.SECOND * 1,() => {createBox();},this);
