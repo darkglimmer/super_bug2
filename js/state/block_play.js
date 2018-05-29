@@ -12,17 +12,12 @@ function playBlock(){
     var isfalling;
     var flashview;
     var hitSound;
+    var scaleconfig = window.innerWidth / 640;
     
 
     this.init = function(){
         //获取当前可用分辨率
-        if(!isPc){
-            game.width = Math.floor(window.innerWidth/16)*16;
-            game.height = Math.floor(window.innerHeight/16)*16;
-        }
 
-        height = game.height;
-        width = game.width;
         hitSound = game.add.sound('hitsound');
     }
     this.create = function () {
@@ -36,17 +31,17 @@ function playBlock(){
     
 
         //背景图片
-        var background = game.add.image(0,100,'background');
-        // background.scale.set(1.14);
+        var background = game.add.image(0,200*scaleconfig,'background');
+        background.scale.set(1*scaleconfig);
 
         //设定边界
-        var bounds = new Phaser.Rectangle(79, 0, 275, 770);game.state
-        var flash = new  Phaser.Rectangle(79, 240, 273, 530);
+        var bounds = new Phaser.Rectangle(79*scaleconfig, 0, 275*scaleconfig, 870*scaleconfig);game.state
+        var flash = new  Phaser.Rectangle(79*scaleconfig, 240*scaleconfig, 273*scaleconfig, 530*scaleconfig);
 
         //让边界可见 
-        // var graphics = game.add.graphics(bounds.x, bounds.y);
-        // graphics.lineStyle(4, 0xffd900, 1);
-        // graphics.drawRect(0, 0, bounds.width, bounds.height);
+        var graphics = game.add.graphics(bounds.x, bounds.y);
+        graphics.lineStyle(4, 0xffd900, 1);
+        graphics.drawRect(0, 0, bounds.width, bounds.height);
 
         customBounds = { left: null, right: null, top: null, bottom: null };
         createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -58,10 +53,10 @@ function playBlock(){
         
 
         //掉落效果
-        var tmp1 = game.add.sprite(65, 0,'player');
-        tmp1.scale.set(0.7);
+        var tmp1 = game.add.sprite(65*scaleconfig, 0,'player');
+        tmp1.scale.set(0.7*scaleconfig);
 
-        var tween = game.add.tween(tmp1).to({y: 705}, 1500, Phaser.Easing.Linear.None, true);
+        var tween = game.add.tween(tmp1).to({y: 705*scaleconfig}, 1500, Phaser.Easing.Linear.None, true);
         tween.onStart.add(() => {
             isfalling  = true;
         },this);
@@ -77,8 +72,8 @@ function playBlock(){
 
         //添加玩家
         // player = game.add.sprite(100,800,'walk');
-        player = game.add.sprite(105,730,'player');
-        player.scale.set(0.7); //要先放大缩小再开启物理引擎
+        player = game.add.sprite(105*scaleconfig,730*scaleconfig,'player');
+        player.scale.set(0.7*scaleconfig); //要先放大缩小再开启物理引擎
         player.alpha = 0;
 
 
@@ -87,7 +82,7 @@ function playBlock(){
         player.body.clearShapes();
         player.body.fixedRotation = true; //不会旋转
         // player.body.setCircle(35);
-        player.body.setRectangle(45, 80, 0, 0);
+        player.body.setRectangle(45*scaleconfig, 80*scaleconfig, 0, 0);
 
 
         //掉落固定的方块 
@@ -118,7 +113,7 @@ function playBlock(){
             
             // if(boxarray.length == 1){
                 // game.time.events.add(Phaser.Timer.SECOND * 4, () => {
-                    if(player.body.y < 300 ){
+                    if(player.body.y < 400 * scaleconfig ){
                         gameover = true;
                         flashview = game.add.graphics(flash.x, flash.y);
                         flashview.beginFill(0xFFFFFF);
@@ -130,10 +125,10 @@ function playBlock(){
                             player.alpha = 0;
                             isfalling = true;
                             var tmp2 = game.add.sprite(player.x - 37,player.y - 37,'player');
-                            tmp2.scale.set(0.7);
-                            var tween2 = game.add.tween(tmp2).to({y: 1100}, 1000, Phaser.Easing.Linear.None, true);
+                            tmp2.scale.set(0.7* scaleconfig);
+                            var tween2 = game.add.tween(tmp2).to({y: 1100* scaleconfig}, 1000, Phaser.Easing.Linear.None, true);
                             tween2.onComplete.add(() => {
-                                game.state.start('loadball');
+                                game.state.start('playball');
                             }, this); 
                         },this);
                     } else if(boxarray.length == 0) {
@@ -147,32 +142,32 @@ function playBlock(){
             // }
             switch (box[0]){
                 case 0:
-                    curbox = game.add.sprite(box[1],100,'iBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100,'iBox');
                     game.physics.p2.enable(curbox, false);
                     curbox.body.angle = box[2];
                     curbox.body.velocity.y = 40;
 
                 break;
                 case 1:
-                    curbox = game.add.sprite(box[1],100,'lBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100,'lBox');
                     game.physics.p2.enable(curbox,false);
                     initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','LBox');
                 break;
                 case 2:
-                    curbox = game.add.sprite(box[1],100,'oBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100,'oBox');
                     game.physics.p2.enable(curbox,false);
                     curbox.body.velocity.y = 40;
                 break;
                 case 3:
-                    curbox = game.add.sprite(box[1],100,'tBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100,'tBox');
                     game.physics.p2.enable(curbox,false);
                     
                     initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','TBox');
                 break;
                 case 4:
-                    curbox = game.add.sprite(box[1],100,'xBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100,'xBox');
                     game.physics.p2.enable(curbox,false);
                     initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','XBox');

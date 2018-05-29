@@ -22,15 +22,7 @@ function playball(game){
         width = game.width;
     }
     this.create = function () {
-        // var tmp = game.add.sprite(73, 0,'person');
-        // tmp.scale.set(0.7);
-        // var tween = game.add.tween(tmp).to({y: 705}, 1000, Phaser.Easing.Linear.None, true);
-        // tween.onComplete.add(killtmp,this);
-        // function killtmp(){
-        //     tmp.kill();
-        //     paddle.alpha = 1;   
-        // }
-        // paddle.alpha = 0;
+
         
         game.physics.startSystem(Phaser.Physics.ARCADE);//开启物理引擎
         game.physics.arcade.checkCollision.down = false;
@@ -74,14 +66,32 @@ function playball(game){
         paddle.scale.set(0.7);
         paddle.body.immovable = true;
 
-        ball = game.add.sprite(game.world.centerX, paddle.y - 60, 'ball');
+
+        var tmp = game.add.sprite(73, 0,'person');
+        tmp.scale.set(0.7);
+        var tween = game.add.tween(tmp).to({y: 870}, 1000, Phaser.Easing.Linear.None, true);
+        tween.onComplete.add(plankdown,this);
+        paddle.alpha = 0;
+
+        function plankdown(){
+            var tmp2 = game.add.sprite(73, 0,'plank');
+            tmp2.scale.set(0.7);
+            var tween2 = game.add.tween(tmp2).to({y: 870}, 1000, Phaser.Easing.Linear.None, true);
+            tween2.onComplete.add(killtmp,this);
+            function killtmp(){
+                tmp.kill();
+                tmp2.kill();
+                paddle.alpha = 1;  
+            }
+        }
+
+
+        ball = game.add.sprite(73, 500, 'ball');
         ball.scale.set(0.5)
         ball.anchor.set(0.5);//指定坐标，居中.
         ball.checkWorldBounds = true;
-
-
         game.physics.enable(ball, Phaser.Physics.ARCADE);
-
+        
         if (ballOnPaddle)
         {
             ballOnPaddle = false;
@@ -152,19 +162,27 @@ function playball(game){
             {
                 //ball.body.velocity.y = 300;
                 //ball.body.velocity.x = 75;
-                // flashview.beginFill(0xFFFFFF);
-                // flashview.drawRect(0, 0, flash.width, flash.height);
+                
+                var flash = new  Phaser.Rectangle(0, 0, 800, 1136);
+
+                var flashview = game.add.graphics(flash.x, flash.y);
+                flashview.beginFill(0xFFFFFF);
+                flashview.drawRect(0, 0, 800, 1200);
         
-                // var flashtween = game.add.tween(flashview).from({ alpha: 0 }, 500, Phaser.Easing.Linear.None, false, 0, 1, true);
-                // flashtween.start();
-                game.state.start("loadjump");
+                var flashtween = game.add.tween(flashview).from({ alpha: 0 }, 500, Phaser.Easing.Linear.None, false, 0, 1, false);
+                flashtween.start();
+                flashtween.onComplete.add(() => {
+                        var tmp2 = game.add.sprite(paddle.body.x, paddle.body.y,'person');
+                        tmp2.scale.set(0.7);
+                        var tween2 = game.add.tween(tmp2).to({y:1500}, 1000, Phaser.Easing.Linear.None, true);
+                        tween2.onComplete.add(() =>{
+                            paddle.alpha = 0;
+                            game.state.start('playjump');
+                        },this);
+           
+                },this);
             }
         }
-
-        
-        function ballHitfloor(){
-            game.state.start("");//gif
-        } 
         function ballHitBrick(_ball,_brick){
             groundSound.play();
             _brick.kill();

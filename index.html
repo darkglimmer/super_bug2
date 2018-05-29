@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>blockDown</title>
+  <title>STARBUGS</title>
   <style>
     html,body{ height:100%; margin: 0; padding: 0;}
     #container{ height:100%; padding-top: 1px; box-sizing:border-box; -webkt-box-sizing:border-box;}
@@ -10,15 +10,13 @@
   <script src="./phaser.min.js"></script>
   <script src="js/jsonFile.js"></script>
   <script src="js/state/gif.js"></script>
-  <script src="js/state/mario_load.js"></script>
   <script src="js/state/mario_play.js"></script>
-  <script src="js/state/block_load.js"></script>
   <script src="js/state/block_play.js"></script>
-  <script src="js/state/ball_load.js"></script>
   <script src="js/state/ball_play.js"></script>
   <script src="js/state/end.js"></script>
-  <script src="js/state/jump_load.js"></script>
   <script src="js/state/jump_play.js"></script>
+  <script src="js/state/load.js"></script>
+
 
 
 
@@ -45,24 +43,19 @@
       game = new Phaser.Game(window.innerWidth,window.innerHeight,Phaser.AUTO,'container');
     }
 //增加游戏状态
+    game.state.add('load',load);
     game.state.add('loadgif',loadgif);  
-    game.state.add('loadmario',loadMario);
     game.state.add('playmario',playMario);
-    game.state.add('loadblock',loadBlock);
     game.state.add('playblock',playBlock);
-    game.state.add('loadball',loadball);
     game.state.add('playball',playball);
     game.state.add('ending',ending);
-
-
-    game.state.add('loadjump',loadjump);
     game.state.add('playjump',playjump);
 
 
 
 
 //开始加载
-    game.state.start('loadgif');
+    game.state.start('load');
   </script>
 </head>
 <body>
