@@ -128,7 +128,7 @@ function playBlock(){
                             tmp2.scale.set(0.7);
                             var tween2 = game.add.tween(tmp2).to({y: 1100}, 1000, Phaser.Easing.Linear.None, true);
                             tween2.onComplete.add(() => {
-                                game.state.start('loadball');
+                                game.state.start('playball');
                             }, this); 
                         },this);
                     } else if(boxarray.length == 0) {

@@ -58,7 +58,7 @@ function playball(game){
                 brick.body.immovable = true;//砖块不能动
             }
         }
-        paddle = game.add.sprite(game.world.centerX, 840,'go');
+        paddle = game.add.sprite(game.world.centerX, 900,'go');
         paddle.anchor.setTo(0.5, 0.5);//设置木板的中心点
         game.physics.enable(paddle, Phaser.Physics.ARCADE);
         paddle.body.collideWorldBounds = true;//它会与边界进行碰撞，到游戏区域边界就不会掉下去
@@ -69,14 +69,14 @@ function playball(game){
 
         var tmp = game.add.sprite(73, 0,'person');
         tmp.scale.set(0.7);
-        var tween = game.add.tween(tmp).to({y: 820}, 1000, Phaser.Easing.Linear.None, true);
+        var tween = game.add.tween(tmp).to({y: 870}, 1000, Phaser.Easing.Linear.None, true);
         tween.onComplete.add(plankdown,this);
         paddle.alpha = 0;
 
         function plankdown(){
             var tmp2 = game.add.sprite(73, 0,'plank');
             tmp2.scale.set(0.7);
-            var tween2 = game.add.tween(tmp2).to({y: 820}, 1000, Phaser.Easing.Linear.None, true);
+            var tween2 = game.add.tween(tmp2).to({y: 870}, 1000, Phaser.Easing.Linear.None, true);
             tween2.onComplete.add(killtmp,this);
             function killtmp(){
                 tmp.kill();
@@ -167,18 +167,19 @@ function playball(game){
 
                 var flashview = game.add.graphics(flash.x, flash.y);
                 flashview.beginFill(0xFFFFFF);
-                flashview.drawRect(0, 0, flash.width, flash.height);
+                flashview.drawRect(0, 0, 800, 1200);
         
                 var flashtween = game.add.tween(flashview).from({ alpha: 0 }, 500, Phaser.Easing.Linear.None, false, 0, 1, false);
                 flashtween.start();
                 flashtween.onComplete.add(() => {
-                        var tmp2 = game.add.sprite(paddle.body.x, paddle.body.y,'go');
+                        var tmp2 = game.add.sprite(paddle.body.x, paddle.body.y,'person');
                         tmp2.scale.set(0.7);
                         var tween2 = game.add.tween(tmp2).to({y:1500}, 1000, Phaser.Easing.Linear.None, true);
-                        tween2.onComplete.add(() =>{game.state.start('loadjump');},this);
-      
-                    
-                        
+                        tween2.onComplete.add(() =>{
+                            paddle.alpha = 0;
+                            game.state.start('playjump');
+                        },this);
+           
                 },this);
             }
         }

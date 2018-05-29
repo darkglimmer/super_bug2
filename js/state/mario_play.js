@@ -134,7 +134,7 @@ function playMario(game){
                 }, this);
                 intopipe.onComplete.add(() => {
                     istweening = false;
-                    game.state.start('loadblock');
+                    game.state.start('playblock');
                 }, this)
             }
 ;
