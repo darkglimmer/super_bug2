@@ -75,6 +75,9 @@ function load(game){
 		this.load.audio('shoot','assets/music/spring.mp3');
 		this.load.audio('hole','assets/music/hole.mp3');
         this.load.audio('click','assets/music/click.mp3');
+
+        game.load.spritesheet('plat2', 'assets/img/plat.png',362,154,2);
+        game.load.spritesheet('spring2','assets/img/spring.png',367,216,2);
         
         //ending
         game.load.tilemap('end', 'assets/end.json', null, Phaser.Tilemap.TILED_JSON);
@@ -85,6 +88,6 @@ function load(game){
         
     }
     this.create = function(){
-        game.state.start('gameover');
+        game.state.start('playjump');
     }
 };

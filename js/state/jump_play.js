@@ -20,6 +20,9 @@ function playjump(game){
     var isRun = false;
     var playerOnfloor = true;
     var cursors;
+    var hitplat;
+    var hitspring;
+
     this.init = function(){
         //获取当前可用分辨率
         if(!isPc){
@@ -37,7 +40,7 @@ function playjump(game){
         game.world.setBounds(0, 0, 640, 3200);//修改尺寸
         game.physics.startSystem(Phaser.Physics.P2JS);
 
-        player = game.add.sprite(game.world.centerX, 3170, 'person');
+        player = game.add.sprite(game.world.centerX, 3000, 'person');
         game.physics.enable(player, Phaser.Physics.ARCADE);
         // player.anchor.x = 0.5;
         player.body.gravity.y = 300;
@@ -69,10 +72,12 @@ function playjump(game){
         var platform;
         for (var i = 0; i < 30; i++)
         {
-            platform = platform_0.create(game.world.randomX, game.world.randomY, 'platform_0'); 
+            // platform = platform_0.create(game.world.randomX, game.world.randomY, 'platform_0');
+            platform = platform_0.create(game.world.randomX, game.world.randomY, 'spring2'); 
             platform.scale.set(0.2);
             platform.body.bounce.set(1);
-            //platform.body.immovable = true;//砖块不能动
+            
+            // platform.body.immovable = true;//砖块不能动
 
         }
 
@@ -104,10 +109,12 @@ function playjump(game){
         platform_2.physicsBodyType = Phaser.Physics.ARCADE;         
         for (var i = 0; i < 5; i++)
         {
-            platform = platform_2.create(game.world.randomX, game.world.randomY, 'platform_2');
+            // platform = platform_2.create(game.world.randomX, game.world.randomY, 'platform_2');
+            platform = platform_2.create(game.world.randomX, game.world.randomY, 'plat2');
+            
             platform.scale.set(0.2);
             platform.body.bounce.set(1);
-            //platform.body.immovable = true;//砖块不能动
+            // platform.body.immovable = true;//砖块不能动
 
         }
         
@@ -167,18 +174,21 @@ function playjump(game){
         game.physics.arcade.collide(player, platform_3, PlayerHitPlatform_3, null, this);
         game.physics.arcade.collide(player, platform_1, PlayerHitPlatform_1, null, this);
         game.physics.arcade.collide(player, hole, PlayerOnHole, null, this);
-        
+        game.physics.arcade.collide(player, platform_2, PlayerHitPlatform_2, null, this);
+
 
         function PlayerHitPlatform_0(_player,_platform){
+            hitspring = _platform.animations.add('spring',[0,1],60,false);
+            
             if(_platform.y > _player.y){
                 music_1.play();
                 _player.body.velocity.y = -400;
+                hitspring.play('spring');
             }
             else{
                 music_1.play();
                 _player.body.velocity.y = 300;
             }
-            
         }
 
         function PlayerHitPlatform_3(_player,_platform){
@@ -217,15 +227,18 @@ function playjump(game){
         }
 
         function PlayerHitPlatform_2(_player,_platform){
+
+            hitplat = _platform.animations.add('break',[0,1],60,false);
+            hitplat.play('break',[0,1],false,true);
             if(_platform.y > _player.y){
                 music_1.play();
                 _player.body.velocity.y = -400;
-                _platform.kill();
+                // _platform.kill();
             }
             else{
                 music_1.play();
                 _player.body.velocity.y = 300;
-                _platform.kill();
+                // _platform.kill();
             }
            
             
