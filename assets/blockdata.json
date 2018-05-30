@@ -5,12 +5,12 @@
         {
             "density": 2, "friction": 0, "bounce": 0, 
             "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   34, 100  ,  0, 100  ,  0, 0  ,  34, 0  ]
+            "shape": [   50, 150  ,  0, 150  ,  0, 0  ,  50, 0  ]
         } ,
         {
             "density": 2, "friction": 0, "bounce": 0, 
             "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   67, 67  ,  34, 67  ,  34, 33  ,  67, 33  ]
+            "shape": [   100, 100  ,  50, 100  ,  50, 50  ,  100, 50  ]
         }
     ]
     , 
@@ -19,12 +19,12 @@
         {
             "density": 2, "friction": 0, "bounce": 0, 
             "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   34, 33  ,  67, 33  ,  67, 100  ,  33, 100  ]
+            "shape": [   50, 50  ,  100, 50  ,  100, 150  ,  50, 150  ]
         } ,
         {
             "density": 2, "friction": 0, "bounce": 0, 
             "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   33, 67  ,  0, 67  ,  0, 0  ,  34, 0  ]
+            "shape": [   50, 100  ,  0, 100  ,  0, 0  ,  50, 0  ]
         }
     ]
     , 
@@ -33,22 +33,22 @@
         {
             "density": 2, "friction": 0, "bounce": 0, 
             "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   0, 0  ,  67, 0  ,  33, 34  ,  0, 34  ]
+            "shape": [   0, 0  ,  100, 0  ,  50, 50  ,  0, 50  ]
         } ,
         {
             "density": 2, "friction": 0, "bounce": 0, 
             "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   33, 34  ,  67, 0  ,  67, 100  ,  33, 100  ]
+            "shape": [   50, 50  ,  100, 0  ,  100, 150  ,  50, 150  ]
         } ,
         {
             "density": 2, "friction": 0, "bounce": 0, 
             "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   0, 0  ,  67, 0  ,  33, 34  ,  0, 34  ]
+            "shape": [   0, 0  ,  100, 0  ,  50, 50  ,  0, 50  ]
         } ,
         {
             "density": 2, "friction": 0, "bounce": 0, 
             "filter": { "categoryBits": 1, "maskBits": 65535 },
-            "shape": [   33, 34  ,  67, 0  ,  67, 100  ,  33, 100  ]
+            "shape": [   50, 50  ,  100, 0  ,  100, 150  ,  50, 150  ]
         }
     ]
     , 

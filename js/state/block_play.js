@@ -3,7 +3,7 @@ function playBlock(){
     var curbox;
     var iBox,lBox,oBox,tBox,xBox;
     // var point,playerPoint=0;
-    var gameover = false;
+    var overflag = false;
     var cursors;
     var jumpButton;
     var customBounds;
@@ -13,11 +13,11 @@ function playBlock(){
     var flashview;
     var hitSound;
     var scaleconfig = window.innerWidth / 640;
-    
+    var tmp2;
 
     this.init = function(){
         //获取当前可用分辨率
-
+        curgame = 2;
         hitSound = game.add.sound('hitsound');
     }
     this.create = function () {
@@ -36,7 +36,7 @@ function playBlock(){
 
         //设定边界
         var bounds = new Phaser.Rectangle(79*scaleconfig, 0, 275*scaleconfig, 870*scaleconfig);game.state
-        var flash = new  Phaser.Rectangle(79*scaleconfig, 240*scaleconfig, 273*scaleconfig, 530*scaleconfig);
+        var flash = new  Phaser.Rectangle(79*scaleconfig, 340*scaleconfig, 273*scaleconfig, 530*scaleconfig);
 
         //让边界可见 
         var graphics = game.add.graphics(bounds.x, bounds.y);
@@ -54,9 +54,9 @@ function playBlock(){
 
         //掉落效果
         var tmp1 = game.add.sprite(65*scaleconfig, 0,'player');
-        tmp1.scale.set(0.7*scaleconfig);
+        tmp1.scale.set(0.8 * scaleconfig);
 
-        var tween = game.add.tween(tmp1).to({y: 705*scaleconfig}, 1500, Phaser.Easing.Linear.None, true);
+        var tween = game.add.tween(tmp1).to({y: 720*scaleconfig}, 1500, Phaser.Easing.Linear.None, true);
         tween.onStart.add(() => {
             isfalling  = true;
         },this);
@@ -72,17 +72,17 @@ function playBlock(){
 
         //添加玩家
         // player = game.add.sprite(100,800,'walk');
-        player = game.add.sprite(105*scaleconfig,730*scaleconfig,'player');
-        player.scale.set(0.7*scaleconfig); //要先放大缩小再开启物理引擎
+        player = game.add.sprite(130*scaleconfig,730*scaleconfig,'player');
+        player.scale.set(0.8 * scaleconfig); //要先放大缩小再开启物理引擎
         player.alpha = 0;
 
 
         
-        game.physics.p2.enable(player,false); // true 开始调试
+        game.physics.p2.enable(player, true); // true 开始调试
         player.body.clearShapes();
         player.body.fixedRotation = true; //不会旋转
         // player.body.setCircle(35);
-        player.body.setRectangle(45*scaleconfig, 80*scaleconfig, 0, 0);
+        player.body.setRectangle(60*scaleconfig, 100*scaleconfig, 0, 0);
 
 
         //掉落固定的方块 
@@ -113,8 +113,8 @@ function playBlock(){
             
             // if(boxarray.length == 1){
                 // game.time.events.add(Phaser.Timer.SECOND * 4, () => {
-                    if(player.body.y < 400 * scaleconfig ){
-                        gameover = true;
+                    if(player.body.y < 800 * scaleconfig ){
+                        overflag = true;
                         flashview = game.add.graphics(flash.x, flash.y);
                         flashview.beginFill(0xFFFFFF);
                         flashview.drawRect(0, 0, flash.width, flash.height);
@@ -124,8 +124,8 @@ function playBlock(){
                         flashtween.onComplete.add(() => {
                             player.alpha = 0;
                             isfalling = true;
-                            var tmp2 = game.add.sprite(player.x - 37,player.y - 37,'player');
-                            tmp2.scale.set(0.7* scaleconfig);
+                            tmp2 = game.add.sprite(player.x - 37*scaleconfig,player.y - 37*scaleconfig,'player');
+                            tmp2.scale.set(0.8* scaleconfig);
                             var tween2 = game.add.tween(tmp2).to({y: 1100* scaleconfig}, 1000, Phaser.Easing.Linear.None, true);
                             tween2.onComplete.add(() => {
                                 game.state.start('playball');
@@ -133,8 +133,10 @@ function playBlock(){
                         },this);
                     } else if(boxarray.length == 0) {
                         game.time.events.add(Phaser.Timer.SECOND * 2, () => {
-                            game.add.text(120,game.height/2,'游戏结束 !!')
-                            game.time.events.add(Phaser.Timer.SECOND * 1,() => {game.state.start('playblock');},this);
+                            game.camera.fade(0x000000, 1000,true);
+                            game.camera.onFadeComplete.add(gameover, this);
+                            // game.add.text(120,game.height/2,'游戏结束 !!')
+                            // game.time.events.add(Phaser.Timer.SECOND * 1,() => {game.state.start('playblock');},this);
                         }, this);
                     }
                 // }, this);
@@ -143,32 +145,31 @@ function playBlock(){
             switch (box[0]){
                 case 0:
                     curbox = game.add.sprite(box[1]* scaleconfig,100,'iBox');
-                    game.physics.p2.enable(curbox, false);
+                    curbox.scale.set(0.5);
+                    game.physics.p2.enable(curbox, true);
                     curbox.body.angle = box[2];
                     curbox.body.velocity.y = 40;
 
                 break;
                 case 1:
                     curbox = game.add.sprite(box[1]* scaleconfig,100,'lBox');
-                    game.physics.p2.enable(curbox,false);
                     initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','LBox');
+                    
                 break;
                 case 2:
                     curbox = game.add.sprite(box[1]* scaleconfig,100,'oBox');
-                    game.physics.p2.enable(curbox,false);
+                    curbox.scale.set(0.5);
+                    game.physics.p2.enable(curbox,true);
                     curbox.body.velocity.y = 40;
                 break;
                 case 3:
                     curbox = game.add.sprite(box[1]* scaleconfig,100,'tBox');
-                    game.physics.p2.enable(curbox,false);
-                    
                     initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','TBox');
                 break;
                 case 4:
                     curbox = game.add.sprite(box[1]* scaleconfig,100,'xBox');
-                    game.physics.p2.enable(curbox,false);
                     initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','XBox');
 
@@ -179,44 +180,46 @@ function playBlock(){
             // curbox.body.damping=0.01;
 
             function initblock(box,_angle){
+                box.scale.set(0.5);
+                game.physics.p2.enable(box,true);
                 box.body.clearShapes();
                 box.body.angle = _angle;
                 box.body.velocity.y = 40;
             }
             
             curbox.body.onBeginContact.addOnce(blockHit, this);
+            if(flashview)
+            game.world.bringToTop(flashview);
             
         }
         // 每隔2s掉落一个方块
         // game.time.events.loop(1500, function() {
-        //     if(boxarray.length && !gameover)
+        //     if(boxarray.length && !overflag)
         //         createBox();
         // });
-
+        function gameover(){
+            game.time.events.add(Phaser.Timer.SECOND * 1,() => {
+                bgm.stop();
+                game.state.start('gameover');},this);
+        }
         //碰撞檢測
         function blockHit(body, bodyB, shapeA, shapeB, equation){
             if(body){
                 if(body.sprite.key == 'player'){
-                    game.add.text(120,game.height/2,'游戏结束 !!')
-                    setTimeout(() => {
-                        game.state.start('playblock')
-                    }, 1000);
+                    game.camera.fade(0x000000, 1000,true);
+                    game.camera.onFadeComplete.add(gameover, this);
                 } 
             } 
             hitSound.play();
             curbox.body.static = true;
             // curbox.body.velocity.x = 0;
-            curbox.body.y -= 5;
+            curbox.body.y -= 5*scaleconfig;
             curbox.body.velocity.y = 0;
             curbox.body.fixedRotation = true;
-            if(boxarray.length && !gameover)
+            if(boxarray.length && !overflag)
             createBox();
         }
         game.time.events.add(Phaser.Timer.SECOND * 1,() => {createBox();},this);
-
-
-        cursors = game.input.keyboard.createCursorKeys();
-        jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 
         function touching(something) {
             var result = false;
@@ -274,9 +277,13 @@ function playBlock(){
 
     }
     this.update = function () {
-        if(flashview)
-        game.world.bringToTop(flashview);
+        // if(flashview)
+        // game.world.bringToTop(flashview);
         game.world.bringToTop(player);
+        if(tmp2){
+            game.world.bringToTop(tmp2);
+        }
+        
         game.input.onDown.add(function(e) {  
             if( checkIfCanJump() && !isfalling){
                 player.body.moveUp(240);
@@ -286,48 +293,13 @@ function playBlock(){
 
         player.body.velocity.x = 0;
 
-        if ((cursors.left.isDown || game.input.worldX < player.body.x ) && !isfalling)
+        if (game.input.worldX < player.body.x&& !isfalling)
         {
             player.body.moveLeft(250);
-    
-            // if (facing != 'left' )
-            // {
-            //     player.animations.play('left');
-            //     facing = 'left';
-            // }
         }
-        else if ((cursors.right.isDown || game.input.worldX - 15 > player.body.x )&& !isfalling)
+        else if (game.input.worldX - 15 > player.body.x && !isfalling)
         {
             player.body.moveRight(250);
-    
-            // if (facing != 'right' )
-            // {
-            //     player.animations.play('right');
-            //     facing = 'right';
-            // }
-        }
-        else
-        {
-            // if (facing != 'idle')
-            // {
-            //     player.animations.stop();
-    
-            //     if (facing == 'left')
-            //     {
-            //         player.frame = 6;
-            //     }
-            //     else
-            //     {
-            //         player.frame = 0;
-            //     }
-    
-            //     facing = 'idle';
-            // }
-        }
-        
-        if (jumpButton.isDown && checkIfCanJump() && !isfalling)
-        {
-            
         }
 
 
