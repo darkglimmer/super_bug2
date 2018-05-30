@@ -31,23 +31,26 @@ function playjump(game){
         music_3 = game.add.sound('hole');
         height = game.height;
         width = game.width;
+        curgame = 4;
     }
     this.create = function(){
-        game.add.tileSprite(0, 0, 640, 3200, 'background');
+        var bgImage = game.add.image(0, 0,'beijing');
+        bgImage.scale.x = window.innerWidth/640;
+        bgImage.scale.y = window.innerHeight/150;
         game.world.setBounds(0, 0, 640, 3200);//修改尺寸
         game.physics.startSystem(Phaser.Physics.P2JS);
 
-        player = game.add.sprite(game.world.centerX, 3170, 'person');
+        player = game.add.sprite(game.world.centerX, 2800, 'fly');
         game.physics.enable(player, Phaser.Physics.ARCADE);
-        // player.anchor.x = 0.5;
         player.body.gravity.y = 300;
         if(playerOnfloor){
-            player.body.velocity.y = -500;
+            player.body.velocity.y = -400;
             playerOnfloor = false;
         }
-        player.scale.set(0.5);//设置图片大小
-        player.body.collideWorldBounds = true;
-        player.body.outOfCameraBoundsKill = true;
+        player.scale.x = window.innerWidth/640;
+        player.scale.y = window.innerHeight/1136;
+        // player.body.collideWorldBounds = true;
+        // player.body.outOfCameraBoundsKill = true;
 		// player.body.autoCull = true;
 
 
@@ -67,79 +70,91 @@ function playjump(game){
 
 
         var platform;
-        for (var i = 0; i < 30; i++)
+        for (var i = 0; i < 3; i++)
         {
-            platform = platform_0.create(game.world.randomX, game.world.randomY, 'platform_0'); 
-            platform.scale.set(0.2);
+            platform = platform_0.create(240 * i, 3120, 'platform_0');
+            platform.scale.x = window.innerWidth/1400;
+            platform.scale.y = window.innerHeight/2500;
             platform.body.bounce.set(1);
-            //platform.body.immovable = true;//砖块不能动
+            platform.body.immovable = true;//砖块不能动
 
         }
 
+
+        var ene_g = [3,6,7,9,11,12,18,22,26,30];
+        for (var i = 0; i < 10; i++)
+        {
+            platform = platform_0.create(game.world.randomX, 3120 - (ene_g[i]*100), 'platform_0'); 
+
+            platform.scale.x = window.innerWidth/1400;
+            platform.scale.y = window.innerHeight/2500;
+            platform.body.bounce.set(1);
+            platform.body.immovable = true;//砖块不能动
+
+        }
+
+        var ene_w = [15,17,18,24,29];
         platform_3 = game.add.group();
         platform_3.enableBody = true;
         platform_3.physicsBodyType = Phaser.Physics.ARCADE;
-        for (var i = 0; i < 15; i++)
+        for (var i = 0; i < 5; i++)
         {
-            platform = platform_3.create(game.world.randomX, game.world.randomY, 'platform_3');
-            platform.scale.set(0.2);
+            platform = platform_3.create(game.world.randomX, 3120 - (ene_w[i]*100), 'platform_3'); 
+            platform.scale.x = window.innerWidth/1400;
+            platform.scale.y = window.innerHeight/2500;
             platform.body.bounce.set(1);
-            //platform.body.immovable = true;//砖块不能动
-
         }
 
+        var ene_b = [2,8,13,17,24];
         platform_1 = game.add.group();
         platform_1.enableBody = true;
         platform_1.physicsBodyType = Phaser.Physics.ARCADE;        
-        for (var i = 0; i < 10; i++)
+        for (var i = 0; i < 5; i++)
         {
-            platform = platform_1.create(game.world.randomX, game.world.randomY, 'platform_1');
-            platform.scale.set(0.2);
+            platform = platform_1.create(game.world.randomX, 3120 - (ene_b[i]*100), 'platform_1'); 
+            platform.scale.x = window.innerWidth/1400;
+            platform.scale.y = window.innerHeight/2500;
             platform.body.bounce.set(1);
             //platform.body.immovable = true;//砖块不能动
 
         }
+
+        var ene_m = [10,14,23];
         platform_2 = game.add.group();
         platform_2.enableBody = true;
         platform_2.physicsBodyType = Phaser.Physics.ARCADE;         
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i < 3; i++)
         {
-            platform = platform_2.create(game.world.randomX, game.world.randomY, 'platform_2');
-            platform.scale.set(0.2);
+            platform = platform_2.create(game.world.randomX, 3120 - (ene_m[i]*100), 'platform_2'); 
+            platform.scale.x = window.innerWidth/1400;
+            platform.scale.y = window.innerHeight/2500;
             platform.body.bounce.set(1);
-            //platform.body.immovable = true;//砖块不能动
-
         }
         
-        
+        var ene_h = [7,11,21];
         hole = game.add.group();
         hole.enableBody = true;
         hole.physicsBodyType = Phaser.Physics.ARCADE;    
         for (var i = 0; i < 3; i++)
         {
-            platform = hole.create(game.world.randomX, game.world.randomY, 'hole');
-            platform.scale.set(0.3);
+            platform = hole.create(game.world.randomX, 3120 - (ene_h[i]*100), 'hole');
+            platform.scale.set(0.6);
             platform.body.bounce.set(1);
-            //platform.body.immovable = true;//砖块不能动
 
         }
-        
-            
-		// player.events.onKilled.add(function(sprite){
-        //     出现死亡界面
-        //     this.gameEnd(false);
-        // },this);
-        
 
-        
-        // 开启鼠标事件
-        // game.input.mouse.capture = true;
-        // isRun = true;
+        var ene_s = [9,15,27];
+        spring = game.add.group();
+        spring.enableBody = true;
+        spring.physicsBodyType = Phaser.Physics.ARCADE;    
+        for (var i = 0; i < 3; i++)
+        {
+            platform = spring.create(game.world.randomX, 3120 - (ene_s[i]*100), 'spring'); 
+            platform.scale.set(0.5);
+            platform.body.bounce.set(1);
+            platform.body.immovable = true;//砖块不能动
 
-        // game.mouseSprite = this.add.sprite(0,0);
-		// game.mouseSprite.visible = false;
-        // game.physics.arcade.enable(this.mouseSprite);
-        
+        }
         
     },
     this.update = function(){
@@ -162,10 +177,14 @@ function playjump(game){
             player.y += 8;
             player.scale.y = 1;
         }
+        if(player.y > 3150){
+            game.state.start()
+        }
 
         game.physics.arcade.collide(player, platform_0, PlayerHitPlatform_0, null, this);
         game.physics.arcade.collide(player, platform_3, PlayerHitPlatform_3, null, this);
         game.physics.arcade.collide(player, platform_1, PlayerHitPlatform_1, null, this);
+        // game.physics.arcade.collide(player, platform_2, PlayerHitPlatform_2, null, this);
         game.physics.arcade.collide(player, hole, PlayerOnHole, null, this);
         
 
@@ -199,17 +218,13 @@ function playjump(game){
         function PlayerHitPlatform_1(_player,_platform){
             if(_platform.y > _player.y){
                 music_1.play();  
-                _platform.body.moves = true;
 			    _platform.body.collideWorldBounds = true;
-			    _platform.body.onWorldBounds = null;
                 _platform.body.bounce.x = 1;
                 _player.body.velocity.y = -400;
             }
             else{
                 music_1.play();  
-                _platform.body.moves = true;
 			    _platform.body.collideWorldBounds = true;
-			    _platform.body.onWorldBounds = null;
                 _platform.body.bounce.x = 1;
                 _player.body.velocity.y = 300;
             }

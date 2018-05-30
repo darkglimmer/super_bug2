@@ -4,6 +4,7 @@ function loadgif(game){
     }
     this.preload = function(){
         game.load.image('first','assets/img/first.png');
+        game.load.image('warning','assets/img/warning.png');
         game.load.spritesheet('start','assets/img/startbotton.png')
         game.load.spritesheet('gif','assets/img/gif.png',640,1136,24);
     }
@@ -14,9 +15,12 @@ function loadgif(game){
         background.scale.x = window.innerWidth/320;
         background.scale.y = window.innerHeight/580;
         background.alpha = 0.3;
-        button = game.add.button((game.world.centerX-400), 450*(window.innerHeight/580), 'start', actionOnClick, this);
-        button.scale.x = window.innerWidth/320;
-        button.scale.y = window.innerHeight/580;
+        button_1 = game.add.button((game.world.centerX-400), 450*(window.innerHeight/580), 'start', actionOnClick, this);
+        button_1.scale.x = window.innerWidth/320;
+        button_1.scale.y = window.innerHeight/580;
+        button_2 = game.add.button((game.world.centerX-400), 550*(window.innerHeight/580), 'warning', actionOnClick, this);
+        button_2.scale.x = window.innerWidth/320;
+        button_2.scale.y = window.innerHeight/580;
         function actionOnClick () {
             background.visible =! background.visible;
             var gif = game.add.sprite(0,0,'gif')

@@ -10,8 +10,6 @@ function playBlock(){
     var player;
     var yAxis = p2.vec2.fromValues(0, 1);
     var isfalling;
-    var flashview;
-    var hitSound;
     
 
     this.init = function(){
@@ -23,13 +21,12 @@ function playBlock(){
 
         height = game.height;
         width = game.width;
-        hitSound = game.add.sound('hitsound');
     }
     this.create = function () {
         //开启物理引擎
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.physics.p2.gravity.y = 250;
-        // game.physics.p2.damping = 0;
+        game.physics.p2.restitution = 0;
         game.physics.p2.world.defaultContactMaterial.friction = 0.3;
         game.physics.p2.world.setGlobalStiffness(1e5);
         game.physics.p2.setImpactEvents(true);
@@ -92,14 +89,11 @@ function playBlock(){
 
         //掉落固定的方块 
         var boxarray = [
-            [1,303,90],[0,150,90],
-            [1,268,-90],[1,166,90],[1,130,-90],
+            [1,303,90],[1,166,90],
+            [1,268,-90],[1,130,-90],
             // [2,318,0],[2,251,0],[0,201,0],
-            // [2,115,0],[2,318,0],
-            [2,250,0],
-            [3,132,-90],
-            // [2,182,0],
-            [0,283,90],
+            [2,115,0],[2,318,0],[2,250,0],[2,182,0],
+            [0,150,90],[0,283,90],
             [0,150,90],[2,317,0],[2,250,0],
             [2,115,0],[2,182,0],[0,283,90],
             
@@ -121,7 +115,7 @@ function playBlock(){
                 // game.time.events.add(Phaser.Timer.SECOND * 4, () => {
                     if(player.body.y < 300 ){
                         gameover = true;
-                        flashview = game.add.graphics(flash.x, flash.y);
+                        var flashview = game.add.graphics(flash.x, flash.y);
                         flashview.beginFill(0xFFFFFF);
                         flashview.drawRect(0, 0, flash.width, flash.height);
         
@@ -151,44 +145,39 @@ function playBlock(){
                     curbox = game.add.sprite(box[1],100,'iBox');
                     game.physics.p2.enable(curbox, false);
                     curbox.body.angle = box[2];
-                    curbox.body.velocity.y = 40;
+
 
                 break;
                 case 1:
                     curbox = game.add.sprite(box[1],100,'lBox');
                     game.physics.p2.enable(curbox,false);
-                    initblock(curbox,box[2]);
+                    curbox.body.clearShapes();
                     curbox.body.loadPolygon('blockdata','LBox');
+                    curbox.body.angle = box[2];
                 break;
                 case 2:
                     curbox = game.add.sprite(box[1],100,'oBox');
                     game.physics.p2.enable(curbox,false);
-                    curbox.body.velocity.y = 40;
                 break;
                 case 3:
                     curbox = game.add.sprite(box[1],100,'tBox');
                     game.physics.p2.enable(curbox,false);
-                    
-                    initblock(curbox,box[2]);
+                    curbox.body.clearShapes();
                     curbox.body.loadPolygon('blockdata','TBox');
+                    curbox.body.angle = box[2];
                 break;
                 case 4:
                     curbox = game.add.sprite(box[1],100,'xBox');
                     game.physics.p2.enable(curbox,false);
-                    initblock(curbox,box[2]);
+                    curbox.body.clearShapes();
                     curbox.body.loadPolygon('blockdata','XBox');
-
+                    curbox.body.angle = box[2];
                 break;
                 
 
             }
             // curbox.body.damping=0.01;
 
-            function initblock(box,_angle){
-                box.body.clearShapes();
-                box.body.angle = _angle;
-                box.body.velocity.y = 40;
-            }
             
             curbox.body.onBeginContact.addOnce(blockHit, this);
             
@@ -209,10 +198,8 @@ function playBlock(){
                     }, 1000);
                 } 
             } 
-            hitSound.play();
             curbox.body.static = true;
-            // curbox.body.velocity.x = 0;
-            curbox.body.y -= 5;
+            curbox.body.velocity.x = 0;
             curbox.body.velocity.y = 0;
             curbox.body.fixedRotation = true;
             if(boxarray.length && !gameover)
@@ -280,8 +267,7 @@ function playBlock(){
 
     }
     this.update = function () {
-        if(flashview)
-        game.world.bringToTop(flashview);
+
         game.world.bringToTop(player);
         game.input.onDown.add(function(e) {  
             if( checkIfCanJump() && !isfalling){
