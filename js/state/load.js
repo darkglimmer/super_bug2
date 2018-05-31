@@ -45,7 +45,7 @@ function load(game){
         game.load.image('brick_4', 'assets/img/tanqiu4.png');
         game.load.image('go', 'assets/img/资源2.png');
         game.load.image('back', 'assets/img/背景.png');
-        game.load.audio('hit','assets/music/弹球1.1.mp3');
+        game.load.audio('hit','assets/music/ball.mp3');
 
         //block
         game.load.image('iBox','assets/img/pc/IBox.png');
@@ -63,8 +63,8 @@ function load(game){
         game.load.image('player','assets/img/player.png');
         
 
-        this.load.image('background', 'assets/img/beijing1.png');
-		this.load.image('person', 'assets/img/fly.png');
+        this.load.image('beijing', 'assets/img/beijing1.png');
+		this.load.image('fly', 'assets/img/fly.png');
 		this.load.image('platform_0', 'assets/img/taijie3.png');
 		this.load.image('platform_3', 'assets/img/taijie5.png');
 		this.load.image('platform_1', 'assets/img/taijie2.png');

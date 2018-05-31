@@ -4,6 +4,7 @@ function loadgif(game){
     }
     this.preload = function(){
         game.load.image('first','assets/img/first.png');
+        game.load.image('warning','assets/img/warning.png');
         game.load.spritesheet('start','assets/img/startbotton.png')
         game.load.spritesheet('gif','assets/img/gif.png',640,1136,24);
     }
@@ -14,10 +15,13 @@ function loadgif(game){
         background.scale.x = window.innerWidth/320;
         background.scale.y = window.innerHeight/580;
         background.alpha = 0.3;
-        button = game.add.button((game.world.centerX-400), 450*(window.innerHeight/580), 'start', actionOnClick, this);
-        button.scale.x = window.innerWidth/320;
-        button.scale.y = window.innerHeight/580;
-        function actionOnClick () {
+        button_1 = game.add.button((game.world.centerX-370), 420*(window.innerHeight/580), 'start', actionOnClick_1, this);
+        button_1.scale.x = window.innerWidth/420;
+        button_1.scale.y = window.innerHeight/630;
+        button_2 = game.add.button((game.world.centerX-370), 500*(window.innerHeight/580), 'warning', actionOnClick_2, this);
+        button_2.scale.x = window.innerWidth/420;
+        button_2.scale.y = window.innerHeight/630;
+        function actionOnClick_1 () {
             background.visible =! background.visible;
             var gif = game.add.sprite(0,0,'gif')
             gif.scale.x = window.innerWidth/640;
@@ -28,6 +32,9 @@ function loadgif(game){
             function startgame(){
                 game.state.start('load');
             }
+        }
+        function actionOnClick_2 () {
+            //跳转匣子
         }
     }
     this.update = function(){        

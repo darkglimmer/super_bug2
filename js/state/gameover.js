@@ -11,9 +11,9 @@ function gameover(game){
         var tween = game.add.tween(tomb).to({alpha: 1}, 1500, Phaser.Easing.Linear.None,true);
         
         tween.onComplete.add(()=>{
-            button = game.add.button(65*scaleconfig, 450*(window.innerHeight/580), 'restart', restart, this);
-            button.scale.x = window.innerWidth/320;
-            button.scale.y = window.innerHeight/580;
+            button = game.add.button(65*scaleconfig, 420*(window.innerHeight/580), 'restart', restart, this);
+            button.scale.x = window.innerWidth/420;
+            button.scale.y = window.innerHeight/630;
         },this);
 
         // console.log(curgame);
@@ -28,9 +28,12 @@ function gameover(game){
                         game.state.start('playblock');
                         break;
                     case 3:
-                        game.state.start('playball');
+                        game.state.start('playball_2');
                         break;
                     case 4:
+                        game.state.start('playball_3');
+                        break;
+                    case 5:
                         game.state.start('playjump');
                         break;
                 }
