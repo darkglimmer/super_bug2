@@ -1,5 +1,6 @@
 var width,height;
 var scaleconfig = window.innerWidth / 640;
+var bgm;
 function playMario(game){
     var map;
     var layer;
@@ -12,7 +13,6 @@ function playMario(game){
     var currentDataString;
     var enemy1,enemy2,enemy;
     var istweening;
-    var bgm;
     var land;
 
     var scaleconfig = window.innerWidth / 640;

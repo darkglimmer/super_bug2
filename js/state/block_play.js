@@ -38,9 +38,9 @@ function playBlock(){
         var flash = new  Phaser.Rectangle(79*scaleconfig, 340*scaleconfig, 273*scaleconfig, 530*scaleconfig);
 
         //让边界可见 
-        var graphics = game.add.graphics(bounds.x, bounds.y);
-        graphics.lineStyle(4, 0xffd900, 1);
-        graphics.drawRect(0, 0, bounds.width, bounds.height);
+        // var graphics = game.add.graphics(bounds.x, bounds.y);
+        // graphics.lineStyle(4, 0xffd900, 1);
+        // graphics.drawRect(0, 0, bounds.width, bounds.height);
 
         customBounds = { left: null, right: null, top: null, bottom: null };
         createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -77,7 +77,7 @@ function playBlock(){
 
 
         
-        game.physics.p2.enable(player, true); // true 开始调试
+        game.physics.p2.enable(player, false); // true 开始调试
         player.body.clearShapes();
         player.body.fixedRotation = true; //不会旋转
         // player.body.setCircle(35);
@@ -87,11 +87,16 @@ function playBlock(){
         //掉落固定的方块 
         var boxarray = [
             [1,303,90],[0,150,90],
-            [1,268,-90],[1,166,90],[1,130,-90],
+            [1,268,-90],
+            [0,97,0],
+            [1,166,90],
+            // [1,130,-90],
+            [2,147,0],
             // [2,318,0],[2,251,0],[0,201,0],
             // [2,115,0],[2,318,0],
             [2,250,0],
-            [3,132,-90],
+            // [1,268,-90],
+            [3,320,0],
             // [2,182,0],
             [0,283,90],
             [0,150,90],[2,317,0],[2,250,0],
@@ -99,7 +104,8 @@ function playBlock(){
             
             [3,132,-90],[4,183,0],[2,318,0],
             [2,251,0],[3,113,0],[0,283,90],
-            [0,283,90],[2,115,0],[0,283,90],
+            // [0,283,90],
+            [2,115,0],[0,283,90],
             [1,200,-90],[2,318,0],[2,250,0],
             [1,303,90],[1,268,-90],
         
@@ -112,7 +118,7 @@ function playBlock(){
             
             // if(boxarray.length == 1){
                 // game.time.events.add(Phaser.Timer.SECOND * 4, () => {
-                    if(player.body.y < 800 * scaleconfig ){
+                    if(player.body.y < 370 * scaleconfig ){
                         overflag = true;
                         flashview = game.add.graphics(flash.x, flash.y);
                         flashview.beginFill(0xFFFFFF);
@@ -143,32 +149,32 @@ function playBlock(){
             // }
             switch (box[0]){
                 case 0:
-                    curbox = game.add.sprite(box[1]* scaleconfig,100,'iBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100*scaleconfig,'iBox');
                     curbox.scale.set(0.5);
-                    game.physics.p2.enable(curbox, true);
+                    game.physics.p2.enable(curbox, false);
                     curbox.body.angle = box[2];
                     curbox.body.velocity.y = 40;
 
                 break;
                 case 1:
-                    curbox = game.add.sprite(box[1]* scaleconfig,100,'lBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100*scaleconfig,'lBox');
                     initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','LBox');
                     
                 break;
                 case 2:
-                    curbox = game.add.sprite(box[1]* scaleconfig,100,'oBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100*scaleconfig,'oBox');
                     curbox.scale.set(0.5);
-                    game.physics.p2.enable(curbox,true);
+                    game.physics.p2.enable(curbox,false);
                     curbox.body.velocity.y = 40;
                 break;
                 case 3:
-                    curbox = game.add.sprite(box[1]* scaleconfig,100,'tBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100*scaleconfig,'tBox');
                     initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','TBox');
                 break;
                 case 4:
-                    curbox = game.add.sprite(box[1]* scaleconfig,100,'xBox');
+                    curbox = game.add.sprite(box[1]* scaleconfig,100*scaleconfig,'xBox');
                     initblock(curbox,box[2]);
                     curbox.body.loadPolygon('blockdata','XBox');
 
@@ -180,7 +186,7 @@ function playBlock(){
 
             function initblock(box,_angle){
                 box.scale.set(0.5);
-                game.physics.p2.enable(box,true);
+                game.physics.p2.enable(box,false);
                 box.body.clearShapes();
                 box.body.angle = _angle;
                 box.body.velocity.y = 40;
@@ -198,7 +204,7 @@ function playBlock(){
         // });
         function gameover(){
             game.time.events.add(Phaser.Timer.SECOND * 1,() => {
-                bgm.stop();
+                // bgm.stop();
                 game.state.start('gameover');},this);
         }
         //碰撞檢測
@@ -285,7 +291,7 @@ function playBlock(){
         
         game.input.onDown.add(function(e) {  
             if( checkIfCanJump() && !isfalling){
-                player.body.moveUp(240);
+                player.body.moveUp(300);
             }
         }, this)
 

@@ -104,6 +104,6 @@ function load(game){
         
     }
     this.create = function(){
-        game.state.start('addword');
+        game.state.start('playblock');
     }
 };
