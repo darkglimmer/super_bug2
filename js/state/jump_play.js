@@ -258,7 +258,7 @@ function playjump(game){
 
         function PlayerHitPlatform_2(_player,_platform){
             hitplat = _platform.animations.add('break',[0,1],60,false);
-            hitplat.play('break',[0,1],20,false,true);
+            hitplat.play('break',[0,1],10,false,true);
             if(_platform.y > _player.y){
                 music_1.play();
                 _player.body.velocity.y = -400;
@@ -282,7 +282,7 @@ function playjump(game){
                 music_3.play();
                 _player.body.velocity.y = 0;
                 _player.kill();
-                game.state.start("end");
+                game.state.start("ending");
             }
         }
         

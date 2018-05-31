@@ -70,14 +70,14 @@ function playBlock(){
         
 
         //添加玩家
-        // player = game.add.sprite(100,800,'walk');
+        // player = game.add.sprite(100,800,'player');
         player = game.add.sprite(130*scaleconfig,730*scaleconfig,'player');
         player.scale.set(0.8 * scaleconfig); //要先放大缩小再开启物理引擎
         player.alpha = 0;
 
 
         
-        game.physics.p2.enable(player, true); // true 开始调试
+        game.physics.p2.enable(player, false); // true 开始调试
         player.body.clearShapes();
         player.body.fixedRotation = true; //不会旋转
         // player.body.setCircle(35);
@@ -112,7 +112,7 @@ function playBlock(){
             
             // if(boxarray.length == 1){
                 // game.time.events.add(Phaser.Timer.SECOND * 4, () => {
-                    if(player.body.y < 800 * scaleconfig ){
+                    if(player.body.y < 400 * scaleconfig ){
                         overflag = true;
                         flashview = game.add.graphics(flash.x, flash.y);
                         flashview.beginFill(0xFFFFFF);
@@ -133,7 +133,7 @@ function playBlock(){
                     } else if(boxarray.length == 0) {
                         game.time.events.add(Phaser.Timer.SECOND * 2, () => {
                             game.camera.fade(0x000000, 1000,true);
-                            game.camera.onFadeComplete.add(gameover, this);
+                            game.camera.onFadeComplete.add("gameover", this);
                             // game.add.text(120,game.height/2,'游戏结束 !!')
                             // game.time.events.add(Phaser.Timer.SECOND * 1,() => {game.state.start('playblock');},this);
                         }, this);
@@ -145,7 +145,7 @@ function playBlock(){
                 case 0:
                     curbox = game.add.sprite(box[1]* scaleconfig,100,'iBox');
                     curbox.scale.set(0.5);
-                    game.physics.p2.enable(curbox, true);
+                    game.physics.p2.enable(curbox, false);
                     curbox.body.angle = box[2];
                     curbox.body.velocity.y = 40;
 
@@ -159,7 +159,7 @@ function playBlock(){
                 case 2:
                     curbox = game.add.sprite(box[1]* scaleconfig,100,'oBox');
                     curbox.scale.set(0.5);
-                    game.physics.p2.enable(curbox,true);
+                    game.physics.p2.enable(curbox,false);
                     curbox.body.velocity.y = 40;
                 break;
                 case 3:
@@ -180,7 +180,7 @@ function playBlock(){
 
             function initblock(box,_angle){
                 box.scale.set(0.5);
-                game.physics.p2.enable(box,true);
+                game.physics.p2.enable(box,false);
                 box.body.clearShapes();
                 box.body.angle = _angle;
                 box.body.velocity.y = 40;
@@ -285,7 +285,7 @@ function playBlock(){
         
         game.input.onDown.add(function(e) {  
             if( checkIfCanJump() && !isfalling){
-                player.body.moveUp(240);
+                player.body.moveUp(320);
             }
         }, this)
 
@@ -324,7 +324,7 @@ function playBlock(){
             return result;
         }
     }
-    this.render = function (){
+    // this.render = function (){
 
-    }
+    // }
 }
