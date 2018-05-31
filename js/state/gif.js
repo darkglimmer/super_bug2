@@ -3,11 +3,7 @@ function loadgif(game){
         game.scale.pageAlignHorizontally=true;//水平居中
     }
     this.preload = function(){
-        game.load.image('first','assets/img/first.png');
-        game.load.image('warning','assets/img/warning.png');
-        game.load.image('muxi','assets/img/muxi@2x.png');
-        game.load.spritesheet('start','assets/img/startbotton.png')
-        game.load.spritesheet('gif','assets/img/gif.png',640,1136,24);
+
     }
     var button_1;
     var button_2;
@@ -33,11 +29,12 @@ function loadgif(game){
             gif.scale.x = window.innerWidth/640;
             gif.scale.y = window.innerHeight/1136;
             var ani = gif.animations.add('play',[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],2,false);
-            ani.onComplete.add(startgame, this);
-            ani.play('play');
+            // ani.onComplete.add(startgame, this);
+            // ani.play('play');
             function startgame(){
-                game.state.start('load');
+                game.state.start('playmario');
             }
+            startgame();
         }
         function actionOnClick_2 () {
             //跳转匣子

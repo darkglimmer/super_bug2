@@ -113,7 +113,7 @@ function playball_2(game){
                 }
             }
         }
-        paddle = game.add.sprite(game.world.centerX, 1410,'go');
+        paddle = game.add.sprite(game.world.centerX,920*(window.innerHeight/1136),'go');
         paddle.scale.x = window.innerWidth/640;
         paddle.scale.y = window.innerHeight/1136;
         paddle.anchor.setTo(0.5, 0.5);//设置木板的中心点
@@ -135,7 +135,7 @@ function playball_2(game){
             if (ballOnPaddle)
             {
                 ballOnPaddle = false;
-                ball.body.velocity.y = -400;
+                ball.body.velocity.y = -500;
                 ball.body.velocity.x = -90;
             }
         }

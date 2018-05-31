@@ -16,16 +16,18 @@ function playMario(game){
     var land;
 
     var scaleconfig = window.innerWidth / 640;
-    var ene = [[50,1400],[1400,1400],[3300,1400]];
+    var ene = [[70,1200],[1450,1200],[3350,1200]];
     var pointX;
     var hidden;
 
     this.init = function(){
-        istweening = false;
         game.input.x = 4330 * scaleconfig;
         curgame = 1;
+        istweening = false;
     }
     this.create = function () {
+
+        
         //添加物理引擎
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.stage.backgroundColor = '#000000';
@@ -44,7 +46,6 @@ function playMario(game){
 
         // to see the collision tiles
         // layer.debug = true;
-
         map.setCollisionBetween(13, 17);
         map.setCollisionBetween(20, 25);
         map.setCollisionBetween(27, 29);
@@ -56,22 +57,30 @@ function playMario(game){
         land.enableBody = true;
         land.physicsBodyType = Phaser.Physics.ARCADE;
         for(var i = 3900; i < 4300; i += 120 ){
-            var l1 = land.create(i, 2250, 'land2');
+            var l1 = land.create(i, 2000, 'land2');
             l1.scale.set(2);
-            var l2 = land.create(i, 2370, 'land1');
+            var l2 = land.create(i, 2120, 'land1');
             l2.scale.set(2);
         }
         land.setAll('body.immovable', true);
         
 
+        //箭头
+
+        var arrow = game.add.sprite(4170*scaleconfig, 1100*scaleconfig,'arrow');
+        arrow.scale.y = -0.15*scaleconfig;
+        arrow.scale.x = 0.15*scaleconfig;
+        
+        var arrowtween = game.add.tween(arrow).to({y: 1120*scaleconfig}, 500, Phaser.Easing.Linear.Out, true,)
+
         // 添加玩家
-        // player = game.add.sprite(200, 100,'walk');
-        player = game.add.sprite(4600,1500,'walk');
+        // player = game.add.sprite(200, 200,'walk');
+        player = game.add.sprite(6000,1500,'walk');
         player.scale.set(1 * scaleconfig);
         game.physics.arcade.enable(player,false);
         player.collideWorldBounds = true;
         // player.body.bounce.y = 0.2;
-        player.body.gravity.y = 500;
+        player.body.gravity.y = 700;
         game.time.desiredFps = 60;
         player.body.width = 70 * scaleconfig;
 
@@ -81,7 +90,7 @@ function playMario(game){
         player.animations.add('left',[6,7,8,9,10,11],10,true);
         
         
-        hidden = game.add.sprite(3250,1940,'hidden');
+        hidden = game.add.sprite(3280,1630,'hidden');
         hidden.scale.set(1 * scaleconfig);
         game.physics.arcade.enable(hidden,false);
         hidden.alpha = 0;
@@ -90,7 +99,7 @@ function playMario(game){
 
         
         // 水管
-        var pipe = game.add.sprite(4230 * scaleconfig, 1370 * scaleconfig,'pipe');
+        var pipe = game.add.sprite(4230 * scaleconfig, 1170 * scaleconfig,'pipe');
         pipe.scale.set(1 * scaleconfig);
         pipe.inputEnabled = true;
         pipe.events.onInputDown.add(next, this);
@@ -112,7 +121,7 @@ function playMario(game){
         enemy.setAll('body.collideWorldBounds', true);
         enemy.setAll('body.gravity.y', 200);
         enemy.setAll('body.velocity.x', 300);
-        game.time.events.loop(2000, () => {
+        game.time.events.loop(2000, function() {
             enemy.setAll('body.velocity.x', -1, true,false,3);
         },this);
 
@@ -132,12 +141,12 @@ function playMario(game){
         
         function next(){
             if(player.body.x > 4200 * scaleconfig && player.body.x < 4280 * scaleconfig){
-                var intopipe = game.add.tween(player.body).to({y: 2080}, 1000, Phaser.Easing.Linear.Out, false,);
+                var intopipe = game.add.tween(player.body).to({y: 1780}, 1000, Phaser.Easing.Linear.Out, false,);
                 intopipe.start();
-                intopipe.onStart.add(() => {
+                intopipe.onStart.add(function() {
                     istweening = true;
                 }, this);
-                intopipe.onComplete.add(() => {
+                intopipe.onComplete.add(function() {
                     istweening = false;
                     game.state.start('playblock');
                 }, this)
@@ -147,8 +156,8 @@ function playMario(game){
         game.input.onDown.add(function(e) {  
             pointX = e.worldX;
 
-            if(player.body.onFloor() && !istweening && e.clientY < player.body.y - 600*scaleconfig){
-                player.body.velocity.y = -350 * scaleconfig;
+            if(player.body.onFloor() && !istweening && e.clientY < player.body.y - 300*scaleconfig){
+                player.body.velocity.y = -450 * scaleconfig;
             }
         }, this)
 
@@ -175,8 +184,7 @@ function playMario(game){
             // var gameover = game.add.sprite(game.camera.x ,  game.camera.height/2, 'gameover');
             // gameover.scale.set(2.5);
             
-            game.time.events.add(Phaser.Timer.SECOND * 1,() => {
-                bgm.stop();
+            game.time.events.add(Phaser.Timer.SECOND * 1,function() {
                 game.state.start('gameover');},this);
         }
         function hitenemy(_player, _enemy){
@@ -200,6 +208,8 @@ function playMario(game){
                 // game.add.text(player.body.x-50,game.world.height-700,'游戏结束 !!')
                 istweening = true;
                 player.kill();
+
+                bgm.stop();
                 game.camera.fade(0x000000, 1000,true);
 
                 game.camera.onFadeComplete.add(gameover, this);
@@ -266,7 +276,7 @@ function playMario(game){
         // game.debug.text(game.time.physicsElapsed, 32, 32);
         // game.debug.inputInfo(32, 300);
         // game.debug.body(player);
-        game.debug.bodyInfo(player, 100, 100);
+        // game.debug.bodyInfo(player, 100, 100);
         // game.debug.cameraInfo(game.camera, 32, 100);
 
 

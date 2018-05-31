@@ -84,8 +84,8 @@ function playjump(game){
         }
 
 
-        var ene_g = [3,6,9,11,18,22,26,30];
-        for (var i = 0; i < 8; i++)
+        var ene_g = [3,6,9,11,14,17,21,24,27,30];
+        for (var i = 0; i < 10; i++)
         {
             platform = platform_0.create(game.world.randomX, 3120 - (ene_g[i]*100), 'platform_0'); 
 

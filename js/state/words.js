@@ -30,7 +30,7 @@ function addword(){
             tmp.scale.set(0.5 * scaleconfig);
             tmp.alpha = 0;
             count++;
-            var tween = game.add.tween(tmp).to({alpha: 1}, 1700, Phaser.Easing.Linear.None, true);
+            var tween = game.add.tween(tmp).to({alpha: 1}, 1000, Phaser.Easing.Linear.None, true);
             tween.onComplete.add(() => {
                 if(count != 14){
                     if(count == 7){

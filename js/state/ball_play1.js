@@ -71,7 +71,7 @@ function playball_1(game){
         var tmp = game.add.sprite(73, 0,'person');
         tmp.scale.x = window.innerWidth/640;
         tmp.scale.y = window.innerHeight/1136;
-        var tween = game.add.tween(tmp).to({y: 1350}, 1000, Phaser.Easing.Linear.None, true);
+        var tween = game.add.tween(tmp).to({y: 880*(window.innerHeight/1136)}, 1000, Phaser.Easing.Linear.None, true);
         tween.onComplete.add(plankdown,this);
         paddle.alpha = 0;
 
@@ -79,7 +79,7 @@ function playball_1(game){
             var tmp2 = game.add.sprite(73, 0,'plank');
             tmp2.scale.x = window.innerWidth/640;
             tmp2.scale.y = window.innerHeight/1136;
-            var tween2 = game.add.tween(tmp2).to({y: 1350}, 1000, Phaser.Easing.Linear.None, true);
+            var tween2 = game.add.tween(tmp2).to({y: 880*(window.innerHeight/1136)}, 1000, Phaser.Easing.Linear.None, true);
             tween2.onComplete.add(killtmp,this);
             function killtmp(){
                 tmp.kill();

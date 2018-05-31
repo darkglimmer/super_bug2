@@ -5,8 +5,9 @@ function gameover(game){
         
     }
     this.create = function(){
-        var tomb = game.add.sprite(35*scaleconfig , 80*scaleconfig, 'gameover');
-            tomb.scale.set(3);
+        var tomb = game.add.sprite(40*scaleconfig , 80*scaleconfig, 'gameover');
+            tomb.scale.x = window.innerWidth/420;
+            tomb.scale.y = window.innerHeight/630;
             tomb.alpha = 0;
         var tween = game.add.tween(tomb).to({alpha: 1}, 1500, Phaser.Easing.Linear.None,true);
         

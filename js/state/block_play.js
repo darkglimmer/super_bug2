@@ -56,7 +56,7 @@ function playBlock(){
         tmp1.scale.set(0.8 * scaleconfig);
 
         var tween = game.add.tween(tmp1).to({y: 720*scaleconfig}, 1500, Phaser.Easing.Linear.None, true);
-        tween.onStart.add(() => {
+        tween.onStart.add(function(){
             isfalling  = true;
         },this);
         tween.onComplete.add(()=>{
@@ -117,7 +117,7 @@ function playBlock(){
             }
             
             // if(boxarray.length == 1){
-                // game.time.events.add(Phaser.Timer.SECOND * 4, () => {
+                // game.time.events.add(Phaser.Timer.SECOND * 4, function(){
                     if(player.body.y < 370 * scaleconfig ){
                         overflag = true;
                         flashview = game.add.graphics(flash.x, flash.y);
@@ -126,22 +126,22 @@ function playBlock(){
         
                         var flashtween = game.add.tween(flashview).from({ alpha: 0 }, 500, Phaser.Easing.Linear.None, false, 0, 1, true);
                         flashtween.start();
-                        flashtween.onComplete.add(() => {
+                        flashtween.onComplete.add(function(){
                             player.alpha = 0;
                             isfalling = true;
                             tmp2 = game.add.sprite(player.x - 37*scaleconfig,player.y - 37*scaleconfig,'player');
                             tmp2.scale.set(0.8* scaleconfig);
                             var tween2 = game.add.tween(tmp2).to({y: 1100* scaleconfig}, 1000, Phaser.Easing.Linear.None, true);
-                            tween2.onComplete.add(() => {
+                            tween2.onComplete.add(function(){
                                 game.state.start('playball_1');
                             }, this); 
                         },this);
                     } else if(boxarray.length == 0) {
-                        game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+                        game.time.events.add(Phaser.Timer.SECOND * 2, function(){
                             game.camera.fade(0x000000, 1000,true);
                             game.camera.onFadeComplete.add("gameover", this);
                             // game.add.text(120,game.height/2,'游戏结束 !!')
-                            // game.time.events.add(Phaser.Timer.SECOND * 1,() => {game.state.start('playblock');},this);
+                            // game.time.events.add(Phaser.Timer.SECOND * 1,function(){game.state.start('playblock');},this);
                         }, this);
                     }
                 // }, this);
@@ -203,7 +203,7 @@ function playBlock(){
         //         createBox();
         // });
         function gameover(){
-            game.time.events.add(Phaser.Timer.SECOND * 1,() => {
+            game.time.events.add(Phaser.Timer.SECOND * 1,function(){
                 // bgm.stop();
                 game.state.start('gameover');},this);
         }
@@ -224,7 +224,7 @@ function playBlock(){
             if(boxarray.length && !overflag)
             createBox();
         }
-        game.time.events.add(Phaser.Timer.SECOND * 1,() => {createBox();},this);
+        game.time.events.add(Phaser.Timer.SECOND * 1,function(){createBox();},this);
 
         function touching(something) {
             var result = false;
