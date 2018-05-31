@@ -85,9 +85,25 @@ function load(game){
         game.load.image('castle', 'assets/img/castle.png');
         game.load.spritesheet('princess', 'assets/img/princess.png',120,120);
         game.load.image('word', 'assets/img/try.png');
+        game.load.image('text1-1', 'assets/img/1-1@2x.png');
+        game.load.image('text1-2', 'assets/img/1-2@2x.png');
+        game.load.image('text1-3', 'assets/img/1-3@2x.png');
+        game.load.image('text1-4', 'assets/img/1-4@2x.png');
+        game.load.image('text1-5', 'assets/img/1-5@2x.png');
+        game.load.image('text1-6_2-1', 'assets/img/1-6_2-1@2x.png');
+        game.load.image('text2-2', 'assets/img/2-2@2x.png');
+        game.load.image('text2-3', 'assets/img/2-3@2x.png');
+        game.load.image('text2-4', 'assets/img/2-4@2x.png');
+        game.load.image('text2-5', 'assets/img/2-5@2x.png');
+        game.load.image('text2-6', 'assets/img/2-6@2x.png');
+        game.load.image('text2-7', 'assets/img/2-7@2x.png');
+
+
+
+
         
     }
     this.create = function(){
-        game.state.start('playjump');
+        game.state.start('addword');
     }
 };

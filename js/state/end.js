@@ -8,7 +8,6 @@ function ending(game){
     var cursors;
     var jumpButton;
     var istweening = true;
-    var scaleconfig = window.innerWidth / 640;
     var pointX;
     var castle;
     var princess;
@@ -16,7 +15,7 @@ function ending(game){
     //     game.scale.pageAlignHorizontally=true;//水平居中
     // }
     this.create = function(){
-        
+
         //添加物理引擎
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -102,16 +101,14 @@ function ending(game){
                     princess.animations.stop();
                     princess.frame = 0;
                     game.time.events.add(Phaser.Timer.SECOND * 1, ()=>{
-                        game.camera.fade(0x000000, 1000);
-                        game.camera.onFadeComplete.add(addword, this);
+                        game.camera.fade(0x000000, 2000);
+                        game.camera.onFadeComplete.add(()=>{
+                            game.state.start('addword');
+                        }, this);
                     },this);
                 })
             },this);
         }
-        function addword(){
-            game.add.sprite(0,0,)
-        }
-
 
     // 和瓦片地图的碰撞检测
         game.physics.arcade.collide(player, layer);

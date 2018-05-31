@@ -1,5 +1,5 @@
 var width,height;
-
+var scaleconfig = window.innerWidth / 640;
 function playMario(game){
     var map;
     var layer;

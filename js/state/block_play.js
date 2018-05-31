@@ -12,7 +12,6 @@ function playBlock(){
     var isfalling;
     var flashview;
     var hitSound;
-    var scaleconfig = window.innerWidth / 640;
     var tmp2;
 
     this.init = function(){
