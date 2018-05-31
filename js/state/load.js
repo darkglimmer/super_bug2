@@ -1,4 +1,4 @@
-var isPc;
+var curgame = 0;
 function load(game){
     this.init = function () {
         game.scale.pageAlignHorizontally=true;//水平居中
@@ -17,18 +17,21 @@ function load(game){
         goPC();//检测pc或移动
     }
     this.preload = function () {
-        game.load.image('background1','assets/img/background1.png');
+
+        //mario
         game.load.spritesheet('walk','assets/img/walk.png',120,120);
-
-
         game.load.tilemap('mario', 'assets/map1.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('tiles', 'assets/img/map1.png');
         game.load.image('bug','assets/img/heidong0.png');
-        // game.load.image('land1','assets/img/land1.gif');
-        // game.load.image('land2','assets/img/land2.gif');
+        game.load.image('land1','assets/img/land1.gif');
+        game.load.image('land2','assets/img/land2.gif');
         game.load.image('pipe','assets/img/pipe.png');
-        // game.load.image('brick1','assets/brick1.gif');
-        game.load.spritesheet('enemy','assets/img/enemy.png',60,60);
+        game.load.image('hidden','assets/img/hidden.png');
+        game.load.spritesheet('enemy','assets/img/enemy.png',58,54);
+        game.load.audio('bgm','assets/music/mariobgm.mp3');
+        //gameover
+        game.load.image('gameover','assets/img/gameover.png');
+        game.load.image('restart','assets/img/restart.png');
 
 
         game.load.image('ball', 'assets/img/ball.png');
@@ -42,16 +45,17 @@ function load(game){
         game.load.image('brick_4', 'assets/img/tanqiu4.png');
         game.load.image('go', 'assets/img/资源2.png');
         game.load.image('back', 'assets/img/背景.png');
-        game.load.audio('hit','assets/music/弹球1.1.mp3');
+        game.load.audio('hit','assets/music/ball.mp3');
 
-        // game.load.image('line','assets/img/i.png');
+        //block
         game.load.image('iBox','assets/img/pc/IBox.png');
         game.load.image('lBox','assets/img/pc/LBox.png');
         game.load.image('oBox','assets/img/pc/OBox.png');
         game.load.image('tBox','assets/img/pc/TBox.png');
         game.load.image('xBox','assets/img/pc/XBox.png');
         game.load.image('bug','assets/img/heidong0.png');
-        game.load.physics("blockdata", "assets/blockdatas.json");
+        game.load.physics("blockdata", "assets/blockdata.json");
+        game.load.audio('hitsound', "assets/music/ground-hit.wav");
 
         game.load.image('background','assets/img/map.png');
 
@@ -70,9 +74,20 @@ function load(game){
 		this.load.audio('jump','assets/music/jump.mp3');
 		this.load.audio('shoot','assets/music/spring.mp3');
 		this.load.audio('hole','assets/music/hole.mp3');
-		this.load.audio('click','assets/music/click.mp3');
+        this.load.audio('click','assets/music/click.mp3');
+
+        game.load.spritesheet('plat2', 'assets/img/plat.png',362,154,2);
+        game.load.spritesheet('spring2','assets/img/spring.png',367,216,2);
+        
+        //ending
+        game.load.tilemap('end', 'assets/end.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.image('endtile', 'assets/img/map2.png');
+        game.load.image('castle', 'assets/img/castle.png');
+        game.load.spritesheet('princess', 'assets/img/princess.png',120,120);
+        game.load.image('word', 'assets/img/try.png');
+        
     }
     this.create = function(){
-        game.state.start('playjump');
+        game.state.start('playball_1');
     }
 };

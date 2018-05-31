@@ -1,5 +1,4 @@
 var width,height;
-var gameOver = false;
 function playball_3(game){
     var ball;
     var paddle;//木板
@@ -11,18 +10,11 @@ function playball_3(game){
     var s;
     var groundSound;
     this.init = function(){
-        //获取当前可用分辨率
-        if(!isPc){
-            game.width = Math.floor(window.innerWidth/16)*16;
-            game.height = Math.floor(window.innerHeight/16)*16;
-        }
         groundSound = game.add.sound('hit');
-
-        height = game.height;
-        width = game.width;
     }
     this.create = function () {
 
+        var bgm = game.add.sound('bgm',1,true);
         
         game.physics.startSystem(Phaser.Physics.ARCADE);//开启物理引擎
         game.physics.arcade.checkCollision.down = false;
@@ -134,7 +126,7 @@ function playball_3(game){
         paddle.body.immovable = true;
 
 
-        ball = game.add.sprite(73, paddle.y - 200, 'ball');
+        ball = game.add.sprite(73, paddle.y - 180, 'ball');
         ball.scale.x = window.innerWidth/1300;
         ball.scale.y = window.innerHeight/1650;
         ball.anchor.set(0.5);//指定坐标，居中.
@@ -150,10 +142,6 @@ function playball_3(game){
                 ball.body.velocity.x = -90;
             }
         }
-        if (ballOnPaddle)
-        {
-            
-        }    
         ball.body.collideWorldBounds = true;//它会与边界进行碰撞，到游戏区域边界就不会掉下去
         ball.body.bounce.set(1);
     },
@@ -181,16 +169,6 @@ function playball_3(game){
             game.physics.arcade.collide(ball, bricks, ballHitBrick, null, this);
             game.physics.arcade.collide(ball, wall_l, ballHitwall, null, this);
             game.physics.arcade.collide(ball, wall_r, ballHitwall, null, this);
-        }
-
-        if(ball.body.y > 1400){
-            gameOver = true;
-        }
-        
-        if(gameOver){
-            ball.body.velocity.setTo(0, 0);
-            ball.body.velocity.y = 0;
-            ball.body.velocity.x = 0;
         }
         function ballHitwall(_ball,_wall){
             groundSound.play();
