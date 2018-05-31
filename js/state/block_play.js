@@ -70,7 +70,7 @@ function playBlock(){
         
 
         //添加玩家
-        // player = game.add.sprite(100,800,'walk');
+        // player = game.add.sprite(100,800,'player');
         player = game.add.sprite(130*scaleconfig,730*scaleconfig,'player');
         player.scale.set(0.8 * scaleconfig); //要先放大缩小再开启物理引擎
         player.alpha = 0;
@@ -139,7 +139,7 @@ function playBlock(){
                     } else if(boxarray.length == 0) {
                         game.time.events.add(Phaser.Timer.SECOND * 2, () => {
                             game.camera.fade(0x000000, 1000,true);
-                            game.camera.onFadeComplete.add(gameover, this);
+                            game.camera.onFadeComplete.add("gameover", this);
                             // game.add.text(120,game.height/2,'游戏结束 !!')
                             // game.time.events.add(Phaser.Timer.SECOND * 1,() => {game.state.start('playblock');},this);
                         }, this);
@@ -330,7 +330,7 @@ function playBlock(){
             return result;
         }
     }
-    this.render = function (){
+    // this.render = function (){
 
-    }
+    // }
 }
